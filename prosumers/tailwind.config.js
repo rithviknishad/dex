@@ -23,6 +23,7 @@ module.exports = {
       fontFamily: {
         sans: ["var(--font-inter)"],
         mono: ["var(--font-roboto-mono)"],
+        display: ["var(--font-comfortaa)"],
       },
     },
     colors: {

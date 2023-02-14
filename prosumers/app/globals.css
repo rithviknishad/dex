@@ -110,7 +110,7 @@ a {
   }
 }
 
-.code {
+code {
   font-weight: 700;
   font-family: var(--font-mono);
 }

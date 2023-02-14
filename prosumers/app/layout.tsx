@@ -1,4 +1,4 @@
-import { Inter, Roboto_Mono } from "@next/font/google";
+import { Inter, Roboto_Mono, Comfortaa } from "@next/font/google";
 import "./globals.css";
 
 const inter = Inter({
@@ -13,13 +13,22 @@ const roboto_mono = Roboto_Mono({
   display: "swap",
 });
 
+const comfortaa = Comfortaa({
+  subsets: ["latin"],
+  variable: "--font-comfortaa",
+  display: "swap",
+});
+
 export default function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={`${inter.variable} ${roboto_mono.variable}`}>
+    <html
+      lang="en"
+      className={`${inter.variable} ${roboto_mono.variable} ${comfortaa.variable}`}
+    >
       {/*
         <head /> will contain the components returned by the nearest parent
         head.tsx. Find out more at https://beta.nextjs.org/docs/api-reference/file-conventions/head
