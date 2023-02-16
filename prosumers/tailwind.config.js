@@ -1,3 +1,7 @@
+/** @type {import('tailwindcss').Config} */
+
+const colors = require("tailwindcss/colors");
+
 const brandColor = {
   DEFAULT: "#EEFF41",
   50: "#FEFFF9",
@@ -25,15 +29,23 @@ module.exports = {
         mono: ["var(--font-roboto-mono)"],
         display: ["var(--font-comfortaa)"],
       },
-    },
-    colors: {
-      black: "#000",
-      white: "#fff",
-      brand: brandColor,
+      colors: {
+        brand: brandColor,
+      },
     },
     ringColor: {
       DEFAULT: brandColor[500],
     },
+    ringOffsetColor: {
+      DEFAULT: brandColor[500],
+    },
+    outlineColor: {
+      DEFAULT: brandColor[500],
+    },
   },
-  plugins: [],
+  plugins: [
+    require("@tailwindcss/typography"),
+    // require("@tailwindcss/forms"),
+    require("@headlessui/tailwindcss")({ prefix: "ui" }),
+  ],
 };

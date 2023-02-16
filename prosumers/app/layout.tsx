@@ -1,4 +1,5 @@
 import { Inter, Roboto_Mono, Comfortaa } from "@next/font/google";
+import Script from "next/script";
 import "./globals.css";
 
 const inter = Inter({
@@ -35,6 +36,10 @@ export default function RootLayout({
       */}
       <head />
       <body>{children}</body>
+      <Script
+        src="https://kit.fontawesome.com/fda7cced4e.js"
+        crossOrigin="anonymous"
+      />
     </html>
   );
 }

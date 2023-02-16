@@ -24,7 +24,7 @@ export default function Home() {
         <div className="mx-auto">
           <div className={styles.description}>
             <p>
-              Get started by building&nbsp;
+              Build&nbsp;
               <code>Prosumers and Scenes</code>
             </p>
           </div>

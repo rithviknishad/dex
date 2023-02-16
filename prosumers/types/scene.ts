@@ -20,7 +20,7 @@ export interface EnergySourceModel extends EnergyBaseModel {
   type: "Solar" | "Wind" | "Hydro" | "Geothermal" | "Nuclear" | "Fossil";
 }
 
-export interface EnergyStoreModel extends EnergyBaseModel {
+export interface EnergyStorageModel extends EnergyBaseModel {
   type: "Lithium Ion" | "Lead Acid" | "Flywheel";
   capacity: number;
   max_charge_rate: number;
@@ -41,18 +41,17 @@ export interface ProsumerModel extends BaseModel {
 
   energy_sinks: ProsumerEnergyModel<EnergySinkModel>[];
   energy_sources: ProsumerEnergyModel<EnergySourceModel>[];
-  energy_stores: ProsumerEnergyModel<EnergyStoreModel>[];
+  energy_storages: ProsumerEnergyModel<EnergyStorageModel>[];
 }
 
 export interface Scene extends BaseModel {
-  id: number;
   name: string;
   description: string;
 
   models: {
     energy_sinks: Collection<EnergySinkModel>;
     energy_sources: Collection<EnergySourceModel>;
-    energy_stores: Collection<EnergyStoreModel>;
+    energy_storages: Collection<EnergyStorageModel>;
   };
 
   prosumers: Collection<ProsumerModel>;

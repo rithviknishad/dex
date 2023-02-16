@@ -114,3 +114,12 @@ code {
   font-weight: 700;
   font-family: var(--font-mono);
 }
+
+input[type='search']
+input[type='text'] {
+  @apply bg-black block py-3 px-4 text-white placeholder:text-black/75 disabled:bg-black/50 shadow-none rounded-md
+}
+
+.sidebar {
+  @apply p-4 flex flex-col h-full gap-3 w-96 overflow-auto bg-zinc-900
+}
