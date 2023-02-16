@@ -1,6 +1,6 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import { Scene } from "@/types/scene";
-import { Refer } from "@/types/types";
+import { Collection, Refer } from "@/types/types";
 import mongoose from "mongoose";
 import type { NextApiRequest, NextApiResponse } from "next";
 
@@ -13,7 +13,7 @@ type CreatedResponse = {
 };
 
 type ListResponse = {
-  results: Scene[];
+  results: Collection<Scene>;
 };
 
 export default async function handler(
@@ -43,7 +43,11 @@ export default async function handler(
       .find()
       .toArray();
 
-    res.status(200).json({ results: scenes as any });
+    const results = Object.fromEntries(
+      scenes.map((scene) => [scene._id.toString(), scene as any])
+    );
+
+    res.status(200).json({ results });
     return;
   }
 

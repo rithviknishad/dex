@@ -121,5 +121,5 @@ input[type='text'] {
 }
 
 .sidebar {
-  @apply p-4 flex flex-col h-full gap-3 w-96 overflow-auto bg-zinc-900
+  @apply p-4 flex flex-col h-full gap-3 max-w-sm w-full overflow-auto bg-zinc-900
 }
