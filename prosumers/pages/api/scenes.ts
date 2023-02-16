@@ -64,8 +64,8 @@ export default async function handler(
 
     const result = await scenes.insertOne({
       ...scene,
-      createdAt: now,
-      updatedAt: now,
+      created_at: now,
+      updated_at: now,
     });
 
     res.status(200).json({ id: result.insertedId.toString() });
