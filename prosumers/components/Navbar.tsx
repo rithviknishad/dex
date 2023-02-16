@@ -32,12 +32,15 @@ export default function Navbar() {
             <div className="relative flex h-16 justify-between">
               <div className="relative z-10 flex px-2 lg:px-0 overflow-clip">
                 <div className="flex flex-shrink-0 items-center">
-                  <Image
+                  <p className="text-brand-500 text-sm md:text-lg font-display font-bold tracking-wide">
+                    Vaidyuti
+                  </p>
+                  {/* <Image
                     height={96}
                     width={96}
                     src="https://github.com/vaidyuti.png"
                     alt="Vaidyuti"
-                  />
+                  /> */}
                 </div>
               </div>
               <div className="relative z-0 flex flex-1 items-center justify-center px-2 sm:absolute sm:inset-0">

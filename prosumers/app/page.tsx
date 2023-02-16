@@ -1,4 +1,4 @@
-import Image from "next/image";
+import Link from "next/link";
 import styles from "./page.module.css";
 
 export default function Home() {
@@ -21,14 +21,14 @@ export default function Home() {
             Build and Deploy Scenes
           </span>
         </p>
-        <div className="mx-auto">
+        <Link className="mx-auto" href="/dashboard">
           <div className={styles.description}>
             <p>
-              Build&nbsp;
-              <code>Prosumers and Scenes</code>
+              Open&nbsp;
+              <code>Dashboard</code>
             </p>
           </div>
-        </div>
+        </Link>
       </div>
     </div>
   );

@@ -39,6 +39,7 @@ export default function RootLayout({
       <Script
         src="https://kit.fontawesome.com/fda7cced4e.js"
         crossOrigin="anonymous"
+        strategy="lazyOnload"
       />
     </html>
   );

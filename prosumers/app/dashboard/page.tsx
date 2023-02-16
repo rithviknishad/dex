@@ -1,9 +1,6 @@
-import ScenesSidebar from "@/components/Scene/ScenesSidebar";
+import { redirect } from "next/navigation";
 
-export default function Scenes() {
-  return (
-    <div className="flex flex-row h-full">
-      <ScenesSidebar />
-    </div>
-  );
+export default function Dashboard() {
+  redirect("/dashboard/scenes");
+  return null;
 }
