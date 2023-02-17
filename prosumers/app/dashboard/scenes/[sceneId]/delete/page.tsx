@@ -1,3 +1,4 @@
+import { ScenesManager } from "@/utils/mongoAdapters";
 import { redirect } from "next/navigation";
 
 export default async function DeleteScene({
@@ -5,14 +6,7 @@ export default async function DeleteScene({
 }: {
   params: { sceneId: string };
 }) {
-  const res = await fetch(
-    `${process.env.API_BASE_URL}/api/scenes/${params.sceneId}`,
-    {
-      method: "DELETE",
-    }
-  );
-
-  if (res.status === 200) {
+  if (await ScenesManager.delete(params.sceneId)) {
     redirect("/dashboard/scenes");
   }
 

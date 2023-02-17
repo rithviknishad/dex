@@ -1,5 +1,6 @@
-import { Scene } from "@/types/scene";
+import { ScenesManager } from "@/utils/mongoAdapters";
 import Link from "next/link";
+import { notFound } from "next/navigation";
 import { ReactNode } from "react";
 
 export default async function SceneDetailPage({
@@ -7,11 +8,11 @@ export default async function SceneDetailPage({
 }: {
   params: { sceneId: string };
 }) {
-  const scene = await fetch(
-    `${process.env.API_BASE_URL}/api/scenes/${params.sceneId}`
-  )
-    .then((res) => res.json())
-    .then((data) => data.scene as Scene);
+  const scene = await ScenesManager.retrieve(params.sceneId);
+
+  if (!scene) {
+    notFound();
+  }
 
   const metrics = {
     networkCharacteristics: {
