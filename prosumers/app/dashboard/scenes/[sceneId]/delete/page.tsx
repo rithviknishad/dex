@@ -1,14 +1,25 @@
-import { ScenesManager } from "@/utils/mongoAdapters";
-import { notFound, redirect } from "next/navigation";
+"use client";
 
-export default async function DeleteScene({
+import useFetch from "@/utils/useFetch";
+import { notFound, redirect } from "next/navigation";
+import Loading from "../loading";
+
+export default function DeleteScene({
   params,
 }: {
   params: { sceneId: string };
 }) {
-  if (await ScenesManager.delete(params.sceneId)) {
-    redirect("/dashboard/scenes");
+  const { data, loading } = useFetch(`/api/scenes/${params.sceneId}`, {
+    method: "DELETE",
+  });
+
+  if (loading) {
+    return <Loading />;
   }
 
-  notFound();
+  if (!data) {
+    notFound();
+  }
+
+  redirect("/dashboard/scenes");
 }
