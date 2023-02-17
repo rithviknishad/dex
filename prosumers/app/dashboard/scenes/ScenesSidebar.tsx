@@ -9,10 +9,9 @@ import SceneCard from "./SceneSidebarCard";
 
 interface Props {
   scenes: Collection<Scene>;
-  onSelect: (id: string) => void;
 }
 
-export default function ScenesSidebar({ scenes, onSelect }: Props) {
+export default function ScenesSidebar({ scenes }: Props) {
   const [createScene, setCreateScene] = useState(false);
 
   return (
@@ -45,10 +44,10 @@ export default function ScenesSidebar({ scenes, onSelect }: Props) {
             </span>
           </div>
         ) : (
-          <ul>
+          <ul className="flex flex-col gap-3">
             {Object.entries(scenes).map(([id, scene]) => (
-              <li key={id}>
-                <SceneCard scene={scene} id={id} onClick={() => onSelect(id)} />
+              <li key={"item-" + id}>
+                <SceneCard scene={scene} id={id} />
               </li>
             ))}
           </ul>

@@ -1,5 +1,3 @@
-import ScenesSidebar from "@/components/Scene/ScenesSidebar";
-
 export default function SceneLayout({
   children,
 }: {
