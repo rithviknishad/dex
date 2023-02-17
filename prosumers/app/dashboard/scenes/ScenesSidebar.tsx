@@ -3,23 +3,23 @@
 import Modal from "@/components/Modal";
 import { Scene } from "@/types/scene";
 import { Collection } from "@/types/types";
-import { useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
-import Loading from "../loading";
 import CreateScene from "./CreateScene";
 import SceneCard from "./SceneSidebarCard";
 
 export default function ScenesSidebar() {
+  const pathName = usePathname();
   const [scenes, setScenes] = useState<Collection<Scene>>();
   const [createScene, setCreateScene] = useState(false);
 
   useEffect(() => {
-    if (scenes === undefined) {
+    if (pathName === "/dashboard/scenes" || scenes === undefined) {
       fetch("/api/scenes")
         .then((res) => res.json())
         .then((data) => setScenes(data.results));
     }
-  }, [scenes]);
+  }, [pathName, scenes]);
 
   return (
     <>
