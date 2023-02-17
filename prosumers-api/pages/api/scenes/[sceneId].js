@@ -1,16 +1,16 @@
 import mongoose from "mongoose";
 
 export default async function handler(req, res) {
-  const { MONGO_URL } = process.env;
+  const { MONGODB_URI } = process.env;
   const { sceneId } = req.query;
 
-  if (!MONGO_URL) {
+  if (!MONGODB_URI) {
     res.status(500).json({ detail: "MONGO_URL not set" });
     return;
   }
 
   const connection = await mongoose
-    .connect(MONGO_URL)
+    .connect(MONGODB_URI)
     .catch((err) => res.status(500).json({ detail: err.message }));
 
   if (!connection) {
