@@ -1,7 +1,3 @@
-import { Scene } from "@/types/scene";
-import { Collection, Refer } from "@/types/types";
-import ScenesSidebar from "./ScenesSidebar";
-
 export default function NoSceneSelectedPage() {
   return (
     <div className="p-4 w-full">

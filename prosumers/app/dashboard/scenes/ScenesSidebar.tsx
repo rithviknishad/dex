@@ -3,16 +3,23 @@
 import Modal from "@/components/Modal";
 import { Scene } from "@/types/scene";
 import { Collection } from "@/types/types";
-import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
+import Loading from "../loading";
 import CreateScene from "./CreateScene";
 import SceneCard from "./SceneSidebarCard";
 
-interface Props {
-  scenes: Collection<Scene>;
-}
-
-export default function ScenesSidebar({ scenes }: Props) {
+export default function ScenesSidebar() {
+  const [scenes, setScenes] = useState<Collection<Scene>>();
   const [createScene, setCreateScene] = useState(false);
+
+  useEffect(() => {
+    if (scenes === undefined) {
+      fetch("/api/scenes")
+        .then((res) => res.json())
+        .then((data) => setScenes(data.results));
+    }
+  }, [scenes]);
 
   return (
     <>
@@ -21,7 +28,12 @@ export default function ScenesSidebar({ scenes }: Props) {
         onClose={() => setCreateScene(false)}
         title="Scene: Create"
       >
-        <CreateScene onCreate={() => setCreateScene(false)} />
+        <CreateScene
+          onCreate={(id, scene) => {
+            setCreateScene(false);
+            setScenes((scenes) => ({ ...scenes, [id]: scene }));
+          }}
+        />
       </Modal>
       <div className="sidebar">
         <div className="flex items-center justify-between mb-6">
@@ -34,7 +46,16 @@ export default function ScenesSidebar({ scenes }: Props) {
           </button>
         </div>
 
-        {Object.keys(scenes).length === 0 ? (
+        {scenes === undefined ? (
+          <ul className="flex flex-col gap-3">
+            {Array.from({ length: 4 }).map((_, i) => (
+              <li
+                key={"item-" + i}
+                className="flex w-full h-12 bg-zinc-800 animate-pulse"
+              />
+            ))}
+          </ul>
+        ) : Object.keys(scenes).length === 0 ? (
           <div className="flex flex-col items-center justify-center w-full h-full text-center">
             <span className="text-lg md:text-xl text-zinc-600 font-medium">
               No scenes

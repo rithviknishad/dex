@@ -1,8 +1,9 @@
 import { Scene } from "@/types/scene";
+import { Refer } from "@/types/types";
 import { useState } from "react";
 
 interface Props {
-  onCreate: () => void;
+  onCreate: (id: Refer<Scene>, scene: Scene) => void;
 }
 
 export default function CreateScene({ onCreate }: Props) {
@@ -13,11 +14,13 @@ export default function CreateScene({ onCreate }: Props) {
   const handleCreate = async () => {
     setIsCreating(true);
 
+    const now = new Date().toISOString();
+
     const scene: Scene = {
       name,
       description,
-      created_at: "",
-      updated_at: "",
+      created_at: now,
+      updated_at: now,
       models: {
         energy_sinks: {},
         energy_sources: {},
@@ -26,16 +29,14 @@ export default function CreateScene({ onCreate }: Props) {
       prosumers: {},
     };
 
-    const res = await fetch("/api/scenes", {
+    const { id } = await fetch("/api/scenes", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(scene),
-    });
-
-    console.log(res);
+    }).then((res) => res.json());
 
     setIsCreating(false);
-    onCreate();
+    onCreate(id, scene);
   };
 
   return (

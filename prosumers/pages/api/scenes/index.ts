@@ -35,14 +35,10 @@ export default async function handler(
     return;
   }
 
-  const scenes = await connection.connection.db.collection("scenes");
+  const collection = connection.connection.db.collection("scenes");
 
   if (req.method === "GET") {
-    const scenes = await connection.connection.db
-      .collection("scenes")
-      .find()
-      .toArray();
-
+    const scenes = await collection.find().toArray();
     const results = Object.fromEntries(
       scenes.map((scene) => [scene._id.toString(), scene as any])
     );
@@ -62,7 +58,7 @@ export default async function handler(
 
     const now = new Date().toISOString();
 
-    const result = await scenes.insertOne({
+    const result = await collection.insertOne({
       ...scene,
       created_at: now,
       updated_at: now,
