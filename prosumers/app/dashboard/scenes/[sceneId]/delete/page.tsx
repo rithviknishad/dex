@@ -1,5 +1,5 @@
 import { ScenesManager } from "@/utils/mongoAdapters";
-import { redirect } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 
 export default async function DeleteScene({
   params,
@@ -10,5 +10,5 @@ export default async function DeleteScene({
     redirect("/dashboard/scenes");
   }
 
-  return <div>Something went wrong</div>;
+  notFound();
 }

@@ -1,14 +1,24 @@
-import { ScenesManager } from "@/utils/mongoAdapters";
+"use client";
+
+import { Scene } from "@/types/scene";
+import useFetch from "@/utils/useFetch";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ReactNode } from "react";
+import Loading from "../loading";
 
-export default async function SceneDetailPage({
+export default function SceneDetailPage({
   params,
 }: {
   params: { sceneId: string };
 }) {
-  const scene = await ScenesManager.retrieve(params.sceneId);
+  const { data: scene, loading } = useFetch<Scene>(
+    `/api/scenes/${params.sceneId}`
+  );
+
+  if (loading) {
+    return <Loading />;
+  }
 
   if (!scene) {
     notFound();
