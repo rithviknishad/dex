@@ -1,25 +1,14 @@
 "use client";
 
 import Modal from "@/components/Modal";
-import { Scene } from "@/types/scene";
-import { Collection } from "@/types/types";
-import { usePathname } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import CreateScene from "./CreateScene";
 import SceneCard from "./SceneSidebarCard";
+import ScenesContext from "@/contexts/ScenesContext";
 
 export default function ScenesSidebar() {
-  const pathName = usePathname();
-  const [scenes, setScenes] = useState<Collection<Scene>>();
   const [createScene, setCreateScene] = useState(false);
-
-  useEffect(() => {
-    if (pathName === "/dashboard/scenes" || scenes === undefined) {
-      fetch("/api/scenes")
-        .then((res) => res.json())
-        .then((data) => setScenes(data.results));
-    }
-  }, [pathName, scenes]);
+  const scenes = useContext(ScenesContext) || {};
 
   return (
     <>
@@ -28,12 +17,7 @@ export default function ScenesSidebar() {
         onClose={() => setCreateScene(false)}
         title="Scene: Create"
       >
-        <CreateScene
-          onCreate={(id, scene) => {
-            setCreateScene(false);
-            setScenes((scenes) => ({ ...scenes, [id]: scene }));
-          }}
-        />
+        <CreateScene onDone={() => setCreateScene(false)} />
       </Modal>
       <div className="sidebar">
         <div className="flex items-center justify-between mb-6">

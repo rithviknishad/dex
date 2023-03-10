@@ -36,7 +36,7 @@ export default function SceneCard({ scene, id }: Props) {
           </h3>
           <p className="text-xs text-zinc-500 group-hover:text-zinc-400">
             <span>updated </span>
-            <RelativeTime time={scene.updated_at} />
+            <RelativeTime time={new Date(scene.updated_at).toISOString()} />
           </p>
         </div>
 
@@ -47,19 +47,19 @@ export default function SceneCard({ scene, id }: Props) {
         <div className="flex items-center justify-start font-medium tracking-wider text-brand-800 group-hover:text-brand-700 transition-all duration-200 ease-in-out">
           <i className="fa-solid fa-industry fa-sm ml-1"></i>
           <span className="text-sm ml-1.5">
-            {Object.keys(scene.prosumers).length}
+            {Object.keys(scene.prosumers || {}).length}
           </span>
           <i className="fa-solid fa-plug fa-sm ml-4"></i>
           <span className="text-sm ml-1.5">
-            {Object.keys(scene.models.energy_sources).length}
+            {Object.keys(scene.energy_models?.sources || {}).length}
           </span>
           <i className="fa-solid fa-lightbulb fa-sm ml-4"></i>
           <span className="text-sm ml-1.5">
-            {Object.keys(scene.models.energy_sinks).length}
+            {Object.keys(scene.energy_models?.sinks || {}).length}
           </span>
           <i className="fa-solid fa-car-battery fa-sm ml-4"></i>
           <span className="text-sm ml-1.5">
-            {Object.keys(scene.models.energy_storages).length}
+            {Object.keys(scene.energy_models?.storages || {}).length}
           </span>
         </div>
       </div>

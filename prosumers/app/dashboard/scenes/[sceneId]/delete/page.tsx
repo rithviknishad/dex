@@ -1,24 +1,26 @@
 "use client";
 
-import useFetch from "@/utils/useFetch";
-import { notFound, redirect } from "next/navigation";
+import FirebaseContext from "@/contexts/FirebaseContext";
+import firebaseApp from "@/utils/firebaseApp";
+import { ref, remove } from "firebase/database";
+import { redirect } from "next/navigation";
+import { useContext, useEffect, useState } from "react";
 import Loading from "../loading";
 
 export default function DeleteScene({
-  params,
+  params: { sceneId },
 }: {
   params: { sceneId: string };
 }) {
-  const { data, loading } = useFetch(`/api/scenes/${params.sceneId}`, {
-    method: "DELETE",
-  });
+  const [isDeleting, setIsDeleting] = useState(true);
+  const { db } = useContext(FirebaseContext);
 
-  if (loading) {
+  useEffect(() => {
+    remove(ref(db, `scenes/${sceneId}`)).then(() => setIsDeleting(false));
+  }, [sceneId]);
+
+  if (isDeleting) {
     return <Loading />;
-  }
-
-  if (!data) {
-    notFound();
   }
 
   redirect("/dashboard/scenes");

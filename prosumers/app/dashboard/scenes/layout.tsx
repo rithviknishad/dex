@@ -1,10 +1,20 @@
+"use client";
+
+import StreamProvider from "@/components/providers/StreamProvider";
+import FirebaseContext from "@/contexts/FirebaseContext";
+import ScenesContext from "@/contexts/ScenesContext";
+import { ref } from "firebase/database";
+import { useContext } from "react";
 import ScenesSidebar from "./ScenesSidebar";
 
 export default function Layout({ children }: { children: React.ReactNode }) {
+  const { db } = useContext(FirebaseContext);
   return (
     <div className="flex flex-row h-full w-full">
-      <ScenesSidebar />
-      {children}
+      <StreamProvider context={ScenesContext} source={ref(db, "scenes")}>
+        <ScenesSidebar />
+        <div className="overflow-auto">{children}</div>
+      </StreamProvider>
     </div>
   );
 }

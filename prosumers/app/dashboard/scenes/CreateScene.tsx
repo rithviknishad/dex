@@ -1,42 +1,47 @@
+import FirebaseContext from "@/contexts/FirebaseContext";
 import { Scene } from "@/types/scene";
-import { Refer } from "@/types/types";
-import { useState } from "react";
+import { ref, serverTimestamp, set } from "firebase/database";
+import { useContext, useState } from "react";
+import { toast } from "react-hot-toast";
 
 interface Props {
-  onCreate: (id: Refer<Scene>, scene: Scene) => void;
+  onDone: () => void;
 }
 
-export default function CreateScene({ onCreate }: Props) {
+export default function CreateScene({ onDone }: Props) {
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [isCreating, setIsCreating] = useState(false);
+  const { db } = useContext(FirebaseContext);
 
   const handleCreate = async () => {
     setIsCreating(true);
 
-    const now = new Date().toISOString();
-
     const scene: Scene = {
       name,
       description,
-      created_at: now,
-      updated_at: now,
-      models: {
-        energy_sinks: {},
-        energy_sources: {},
-        energy_storages: {},
-      },
-      prosumers: {},
+      created_at: 0,
+      updated_at: 0,
     };
 
-    const { id } = await fetch("/api/scenes", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(scene),
-    }).then((res) => res.json());
+    await toast.promise(
+      set(
+        ref(db, `scenes/${name.toLowerCase().replace(/[^a-zA-Z0-9]/g, "_")}`),
+        {
+          ...scene,
+          created_at: serverTimestamp(),
+          updated_at: serverTimestamp(),
+        }
+      ),
+      {
+        loading: `Creating ${name}...`,
+        success: `${name} created!`,
+        error: `Failed to create ${name}.`,
+      }
+    );
 
     setIsCreating(false);
-    onCreate(id, scene);
+    onDone();
   };
 
   return (

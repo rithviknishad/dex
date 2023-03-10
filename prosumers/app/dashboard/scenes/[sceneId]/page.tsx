@@ -1,24 +1,17 @@
 "use client";
 
-import { Scene } from "@/types/scene";
-import useFetch from "@/utils/useFetch";
+import SceneContext from "@/contexts/SceneContext";
+
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ReactNode } from "react";
-import Loading from "../loading";
+import { ReactNode, useContext } from "react";
 
 export default function SceneDetailPage({
   params,
 }: {
   params: { sceneId: string };
 }) {
-  const { data: scene, loading } = useFetch<Scene>(
-    `/api/scenes/${params.sceneId}`
-  );
-
-  if (loading) {
-    return <Loading />;
-  }
+  const scene = useContext(SceneContext);
 
   if (!scene) {
     notFound();
@@ -31,7 +24,7 @@ export default function SceneDetailPage({
       baseDemand: "0.3 MW",
     },
     prosumerMixCharacteristics: {
-      prosumers: Object.keys(scene.prosumers).length,
+      prosumers: Object.keys(scene.prosumers || {}).length,
       residential: 5,
       municipal: 5,
       industrial: 5,
@@ -41,9 +34,9 @@ export default function SceneDetailPage({
       external: 2,
     },
     energyModels: {
-      soures: Object.keys(scene.models.energy_sources).length,
-      sinks: Object.keys(scene.models.energy_sinks).length,
-      storages: Object.keys(scene.models.energy_storages).length,
+      soures: Object.keys(scene.energy_models?.sources || {}).length,
+      sinks: Object.keys(scene.energy_models?.sinks || {}).length,
+      storages: Object.keys(scene.energy_models?.storages || {}).length,
     },
   };
 
