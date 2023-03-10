@@ -10,11 +10,11 @@ import ScenesSidebar from "./ScenesSidebar";
 export default function Layout({ children }: { children: React.ReactNode }) {
   const { db } = useContext(FirebaseContext);
   return (
-    <div className="flex flex-row h-full w-full">
-      <StreamProvider context={ScenesContext} source={ref(db, "scenes")}>
+    <StreamProvider context={ScenesContext} source={ref(db, "scenes")}>
+      <div className="flex flex-row h-full w-full">
         <ScenesSidebar />
-        <div className="overflow-auto">{children}</div>
-      </StreamProvider>
-    </div>
+        <div className="overflow-auto h-full w-full">{children}</div>
+      </div>
+    </StreamProvider>
   );
 }

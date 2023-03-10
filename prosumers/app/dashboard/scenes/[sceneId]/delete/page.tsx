@@ -1,7 +1,6 @@
 "use client";
 
 import FirebaseContext from "@/contexts/FirebaseContext";
-import firebaseApp from "@/utils/firebaseApp";
 import { ref, remove } from "firebase/database";
 import { redirect } from "next/navigation";
 import { useContext, useEffect, useState } from "react";
@@ -17,7 +16,7 @@ export default function DeleteScene({
 
   useEffect(() => {
     remove(ref(db, `scenes/${sceneId}`)).then(() => setIsDeleting(false));
-  }, [sceneId]);
+  }, [sceneId, db]);
 
   if (isDeleting) {
     return <Loading />;
