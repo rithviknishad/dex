@@ -50,11 +50,13 @@ export default function ScenesSidebar() {
           </div>
         ) : (
           <ul className="flex flex-col gap-3">
-            {Object.entries(scenes).map(([id, scene]) => (
-              <li key={"item-" + id}>
-                <SceneCard scene={scene} id={id} />
-              </li>
-            ))}
+            {Object.entries(scenes)
+              .sort(([, a], [, b]) => b.updated_at - a.updated_at)
+              .map(([id, scene]) => (
+                <li key={"item-" + id}>
+                  <SceneCard scene={scene} id={id} />
+                </li>
+              ))}
           </ul>
         )}
       </div>
