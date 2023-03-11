@@ -1,10 +1,13 @@
 "use client";
 
+import FirebaseContext from "@/contexts/FirebaseContext";
 import SceneContext from "@/contexts/SceneContext";
+import { ref, remove } from "firebase/database";
 
 import Link from "next/link";
-import { notFound } from "next/navigation";
+import { redirect } from "next/navigation";
 import { ReactNode, useContext } from "react";
+import { toast } from "react-hot-toast";
 
 export default function SceneDetailPage({
   params,
@@ -12,9 +15,10 @@ export default function SceneDetailPage({
   params: { sceneId: string };
 }) {
   const scene = useContext(SceneContext);
+  const { db } = useContext(FirebaseContext);
 
   if (!scene) {
-    notFound();
+    redirect("/dashboard/scenes");
   }
 
   const metrics = {
@@ -53,12 +57,18 @@ export default function SceneDetailPage({
           >
             <i className="fa-regular fa-pen-to-square"></i>Edit
           </Link>
-          <Link
-            href={`/dashboard/scenes/${params.sceneId}/delete`}
+          <button
             className="danger-button"
+            onClick={() => {
+              toast.promise(remove(ref(db, `scenes/${params.sceneId}`)), {
+                loading: `Deleting ${scene.name}`,
+                success: `Deleted ${scene.name}`,
+                error: `Failed to delete ${scene.name}`,
+              });
+            }}
           >
             <i className="fa-regular fa-trash-can"></i> Delete
-          </Link>
+          </button>
         </div>
       </div>
       <span className="text-zinc-400 text-sm">
