@@ -1,6 +1,6 @@
 "use client";
 
-import { onValue, ref } from "firebase/database";
+import { onValue, Query } from "firebase/database";
 import { useEffect, useState } from "react";
 import Loading from "../Loading";
 
@@ -9,7 +9,7 @@ export default function StreamProvider<T>({
   context,
   children,
 }: {
-  source: ReturnType<typeof ref>;
+  source: Query;
   context: React.Context<T | null>;
   children: React.ReactNode;
 }) {
