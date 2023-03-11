@@ -1,6 +1,7 @@
 import FirebaseContext from "@/contexts/FirebaseContext";
-import { Scene } from "@/types/scene";
+import SceneContext from "@/contexts/SceneContext";
 import { ref, serverTimestamp, set } from "firebase/database";
+import { usePathname } from "next/navigation";
 import { useContext, useState } from "react";
 import { toast } from "react-hot-toast";
 
@@ -9,38 +10,51 @@ interface Props {
 }
 
 export default function CreateScene({ onDone }: Props) {
-  const [name, setName] = useState("");
-  const [description, setDescription] = useState("");
-  const [isCreating, setIsCreating] = useState(false);
+  const scene = useContext(SceneContext);
+  const pathSegments = usePathname().split("/");
+  const sceneId =
+    pathSegments[2] === "scenes" && pathSegments[4] === "edit"
+      ? pathSegments[3]
+      : null;
+
+  const [name, setName] = useState(scene?.name || "");
+  const [description, setDescription] = useState(scene?.description || "");
+
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const { db } = useContext(FirebaseContext);
 
-  const handleCreate = async () => {
-    setIsCreating(true);
-
-    const scene: Scene = {
-      name,
-      description,
-      created_at: 0,
-      updated_at: 0,
-    };
+  const handleSubmit = async () => {
+    setIsSubmitting(true);
+    const id = sceneId || name.toLowerCase().replace(/[^a-zA-Z0-9]/g, "_");
 
     await toast.promise(
-      set(
-        ref(db, `scenes/${name.toLowerCase().replace(/[^a-zA-Z0-9]/g, "_")}`),
-        {
-          ...scene,
-          created_at: serverTimestamp(),
-          updated_at: serverTimestamp(),
-        }
-      ),
+      set(ref(db, `scenes/${id}`), {
+        created_at: serverTimestamp(),
+        ...(scene || {}),
+        name,
+        description,
+        updated_at: serverTimestamp(),
+      }),
       {
-        loading: `Creating ${name}...`,
-        success: `${name} created!`,
-        error: `Failed to create ${name}.`,
+        loading: (
+          <p>
+            {scene ? "Updating" : "Creating"} <strong>{name}</strong>...
+          </p>
+        ),
+        success: (
+          <p>
+            <strong>{name}</strong> {scene ? "updated" : "created"}!
+          </p>
+        ),
+        error: (
+          <p>
+            Failed to {scene ? "update" : "create"} <strong>{name}</strong>
+          </p>
+        ),
       }
     );
 
-    setIsCreating(false);
+    setIsSubmitting(false);
     onDone();
   };
 
@@ -56,7 +70,7 @@ export default function CreateScene({ onDone }: Props) {
         className="my-input mt-2"
         placeholder="e.g. Maldives Test Scene"
         value={name}
-        disabled={isCreating}
+        disabled={isSubmitting}
         onChange={(e) => setName(e.target.value)}
       />
       <label
@@ -71,16 +85,16 @@ export default function CreateScene({ onDone }: Props) {
         className="my-input mt-2"
         placeholder="e.g. A test scene for the Maldives"
         value={description}
-        disabled={isCreating}
+        disabled={isSubmitting}
         onChange={(e) => setDescription(e.target.value)}
       />
 
       <button
-        onClick={handleCreate}
-        disabled={isCreating}
+        onClick={handleSubmit}
+        disabled={isSubmitting}
         className="primary-button mt-10 place-self-end"
       >
-        Create
+        {scene ? "Update" : "Create"}
       </button>
     </div>
   );

@@ -41,7 +41,7 @@ export default function SceneDetailPage({
   };
 
   return (
-    <>
+    <div className="px-8 py-6">
       <div className="flex items-center justify-between">
         <h1 className="text-lg md:text-2xl font-bold text-brand-500/80">
           {scene.name || "Untitled"}
@@ -161,7 +161,7 @@ export default function SceneDetailPage({
           />
         </div>
       </section>
-    </>
+    </div>
   );
 }
 

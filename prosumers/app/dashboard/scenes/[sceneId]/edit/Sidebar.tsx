@@ -2,35 +2,38 @@
 
 import Modal from "@/components/Modal";
 import { useContext, useState } from "react";
-import CreateScene from "./CreateScene";
-import SceneCard from "./SceneSidebarCard";
-import ScenesContext from "@/contexts/ScenesContext";
+import SceneContext from "@/contexts/SceneContext";
+import Loading from "../loading";
+import CreateScene from "../../CreateScene";
 
-export default function ScenesSidebar() {
-  const [createScene, setCreateScene] = useState(false);
-  const scenes = useContext(ScenesContext) || {};
+export default function SceneSidebar() {
+  const [editSceneMeta, setEditSceneMeta] = useState(false);
+  const [showCreate, setShowCreate] = useState(false);
+  const scene = useContext(SceneContext);
+
+  if (!scene) return <Loading />;
 
   return (
     <>
       <Modal
-        opened={createScene}
-        onClose={() => setCreateScene(false)}
-        title="Scene: Create"
+        opened={editSceneMeta}
+        onClose={() => setEditSceneMeta(false)}
+        title={`Edit ${scene.name}`}
       >
-        <CreateScene onDone={() => setCreateScene(false)} />
+        <CreateScene onDone={() => setEditSceneMeta(false)} />
       </Modal>
       <div className="sidebar">
-        <div className="flex items-center justify-between mb-6">
-          <h2 className="text-brand-500 text-lg font-bold">Scenes</h2>
+        <div className="flex items-center gap-2 mb-6">
+          <h2 className="text-brand-500 text-lg font-bold">{scene.name}</h2>
           <button
-            className="primary-button"
-            onClick={() => setCreateScene(true)}
+            className="primary-button !border-0"
+            onClick={() => setEditSceneMeta(true)}
           >
-            New Scene
+            <i className="fa-regular fa-pen-to-square"></i>
           </button>
         </div>
 
-        {scenes === undefined ? (
+        {/* {scene === undefined ? (
           <ul className="flex flex-col gap-3">
             {Array.from({ length: 4 }).map((_, i) => (
               <li
@@ -58,7 +61,7 @@ export default function ScenesSidebar() {
                 </li>
               ))}
           </ul>
-        )}
+        )} */}
       </div>
     </>
   );

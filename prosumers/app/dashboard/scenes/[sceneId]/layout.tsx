@@ -19,7 +19,7 @@ export default function SceneLayout({
 
   return (
     <ValueProvider context={SceneContext} value={scenes[params.sceneId]}>
-      <div className="flex flex-col h-full w-full px-8 py-6">{children}</div>
+      <div className="flex flex-col h-full w-full">{children}</div>
     </ValueProvider>
   );
 }
