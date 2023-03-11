@@ -1,8 +1,6 @@
 "use client";
 
-import { Fragment } from "react";
-import { Disclosure, Menu, Transition } from "@headlessui/react";
-import classNames from "@/utils/classNames";
+import { Disclosure, Menu } from "@headlessui/react";
 import Image from "next/image";
 
 const user = {
@@ -10,18 +8,6 @@ const user = {
   email: "rithviknishad@vaidyuti.in",
   imageUrl: "https://github.com/rithviknishad.png",
 };
-
-// const navigation = [
-//   { name: "Dashboard", href: "#", current: true },
-//   { name: "Team", href: "#", current: false },
-//   { name: "Projects", href: "#", current: false },
-//   { name: "Calendar", href: "#", current: false },
-// ];
-// const userNavigation = [
-//   { name: "Your Profile", href: "#" },
-//   { name: "Settings", href: "#" },
-//   { name: "Sign out", href: "#" },
-// ];
 
 export default function Navbar() {
   return (
@@ -96,118 +82,10 @@ export default function Navbar() {
                       />
                     </Menu.Button>
                   </div>
-                  {/* <Transition
-                    as={Fragment}
-                    enter="transition ease-out duration-100"
-                    enterFrom="transform opacity-0 scale-95"
-                    enterTo="transform opacity-100 scale-100"
-                    leave="transition ease-in duration-75"
-                    leaveFrom="transform opacity-100 scale-100"
-                    leaveTo="transform opacity-0 scale-95"
-                  >
-                    <Menu.Items className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-opacity-5 focus:outline-none">
-                      {userNavigation.map((item) => (
-                        <Menu.Item key={item.name}>
-                          {({ active }) => (
-                            <a
-                              href={item.href}
-                              className={classNames(
-                                active ? "bg-zinc-100" : "",
-                                "block py-2 px-4 text-sm text-zinc-700"
-                              )}
-                            >
-                              {item.name}
-                            </a>
-                          )}
-                        </Menu.Item>
-                      ))}
-                    </Menu.Items>
-                  </Transition> */}
                 </Menu>
               </div>
             </div>
-            {/* <nav
-              className="hidden lg:flex lg:space-x-8 lg:py-2"
-              aria-label="Global"
-            >
-              {navigation.map((item) => (
-                <a
-                  key={item.name}
-                  href={item.href}
-                  className={classNames(
-                    item.current
-                      ? "bg-zinc-100 text-zinc-900"
-                      : "text-zinc-900 hover:bg-zinc-50 hover:text-zinc-900",
-                    "rounded-md py-2 px-3 inline-flex items-center text-sm font-medium"
-                  )}
-                  aria-current={item.current ? "page" : undefined}
-                >
-                  {item.name}
-                </a>
-              ))}
-            </nav> */}
           </div>
-
-          {/* <Disclosure.Panel as="nav" className="lg:hidden" aria-label="Global">
-            <div className="space-y-1 px-2 pt-2 pb-3">
-              {navigation.map((item) => (
-                <Disclosure.Button
-                  key={item.name}
-                  as="a"
-                  href={item.href}
-                  className={classNames(
-                    item.current
-                      ? "bg-zinc-100 text-zinc-900"
-                      : "text-zinc-900 hover:bg-zinc-50 hover:text-zinc-900",
-                    "block rounded-md py-2 px-3 text-base font-medium"
-                  )}
-                  aria-current={item.current ? "page" : undefined}
-                >
-                  {item.name}
-                </Disclosure.Button>
-              ))}
-            </div>
-            <div className="border-t border-zinc-200 pt-4 pb-3">
-              <div className="flex items-center px-4">
-                <div className="flex-shrink-0">
-                  <Image
-                    height={40}
-                    width={40}
-                    className="rounded-full"
-                    src={user.imageUrl}
-                    alt=""
-                  />
-                </div>
-                <div className="ml-3">
-                  <div className="text-base font-medium text-zinc-800">
-                    {user.name}
-                  </div>
-                  <div className="text-sm font-medium text-zinc-500">
-                    {user.email}
-                  </div>
-                </div>
-                <button
-                  type="button"
-                  className="ml-auto flex-shrink-0 rounded-full bg-white p-1 text-zinc-400 hover:text-zinc-500 focus:outline-none focus:ring-2 focus:ring-offset-2"
-                >
-                  <span className="sr-only">View notifications</span>
-                  <i className="fa-regular fa-bell"></i>
-                </button>
-              </div>
-              <div className="mt-3 space-y-1 px-2">
-                {userNavigation.map((item) => (
-                  <Disclosure.Button
-                    key={item.name}
-                    as="a"
-                    href={item.href}
-                    className="block rounded-md py-2 px-3 text-base font-medium text-zinc-500 hover:bg-zinc-50 hover:text-zinc-900"
-                  >
-                    {item.name}
-                  </Disclosure.Button>
-                ))}
-              </div>
-            </div>
-          </Disclosure.Panel> */}
         </>
       )}
     </Disclosure>

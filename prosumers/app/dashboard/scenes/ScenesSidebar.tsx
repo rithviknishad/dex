@@ -1,25 +1,16 @@
 "use client";
 
 import Modal from "@/components/Modal";
-import { Scene } from "@/types/scene";
-import { Collection } from "@/types/types";
-import { usePathname } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useContext, useState } from "react";
 import CreateScene from "./CreateScene";
 import SceneCard from "./SceneSidebarCard";
+import ScenesContext from "@/contexts/ScenesContext";
+import { useRouter } from "next/navigation";
 
 export default function ScenesSidebar() {
-  const pathName = usePathname();
-  const [scenes, setScenes] = useState<Collection<Scene>>();
+  const router = useRouter();
   const [createScene, setCreateScene] = useState(false);
-
-  useEffect(() => {
-    if (pathName === "/dashboard/scenes" || scenes === undefined) {
-      fetch("/api/scenes")
-        .then((res) => res.json())
-        .then((data) => setScenes(data.results));
-    }
-  }, [pathName, scenes]);
+  const scenes = useContext(ScenesContext) || {};
 
   return (
     <>
@@ -29,9 +20,9 @@ export default function ScenesSidebar() {
         title="Scene: Create"
       >
         <CreateScene
-          onCreate={(id, scene) => {
+          onDone={(id) => {
             setCreateScene(false);
-            setScenes((scenes) => ({ ...scenes, [id]: scene }));
+            router.push(`/dashboard/scenes/${id}/edit`);
           }}
         />
       </Modal>
@@ -66,11 +57,13 @@ export default function ScenesSidebar() {
           </div>
         ) : (
           <ul className="flex flex-col gap-3">
-            {Object.entries(scenes).map(([id, scene]) => (
-              <li key={"item-" + id}>
-                <SceneCard scene={scene} id={id} />
-              </li>
-            ))}
+            {Object.entries(scenes)
+              .sort(([, a], [, b]) => b.updated_at - a.updated_at)
+              .map(([id, scene]) => (
+                <li key={"item-" + id}>
+                  <SceneCard scene={scene} id={id} />
+                </li>
+              ))}
           </ul>
         )}
       </div>

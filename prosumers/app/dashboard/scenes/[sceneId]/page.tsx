@@ -1,27 +1,24 @@
 "use client";
 
-import { Scene } from "@/types/scene";
-import useFetch from "@/utils/useFetch";
+import FirebaseContext from "@/contexts/FirebaseContext";
+import SceneContext from "@/contexts/SceneContext";
+import { ref, remove } from "firebase/database";
+
 import Link from "next/link";
-import { notFound } from "next/navigation";
-import { ReactNode } from "react";
-import Loading from "../loading";
+import { redirect } from "next/navigation";
+import { ReactNode, useContext } from "react";
+import { toast } from "react-hot-toast";
 
 export default function SceneDetailPage({
   params,
 }: {
   params: { sceneId: string };
 }) {
-  const { data: scene, loading } = useFetch<Scene>(
-    `/api/scenes/${params.sceneId}`
-  );
-
-  if (loading) {
-    return <Loading />;
-  }
+  const scene = useContext(SceneContext);
+  const { db } = useContext(FirebaseContext);
 
   if (!scene) {
-    notFound();
+    redirect("/dashboard/scenes");
   }
 
   const metrics = {
@@ -31,7 +28,7 @@ export default function SceneDetailPage({
       baseDemand: "0.3 MW",
     },
     prosumerMixCharacteristics: {
-      prosumers: Object.keys(scene.prosumers).length,
+      prosumers: Object.keys(scene.prosumers || {}).length,
       residential: 5,
       municipal: 5,
       industrial: 5,
@@ -41,14 +38,14 @@ export default function SceneDetailPage({
       external: 2,
     },
     energyModels: {
-      soures: Object.keys(scene.models.energy_sources).length,
-      sinks: Object.keys(scene.models.energy_sinks).length,
-      storages: Object.keys(scene.models.energy_storages).length,
+      soures: Object.keys(scene.energy_models?.sources || {}).length,
+      sinks: Object.keys(scene.energy_models?.sinks || {}).length,
+      storages: Object.keys(scene.energy_models?.storages || {}).length,
     },
   };
 
   return (
-    <>
+    <div className="px-8 py-6">
       <div className="flex items-center justify-between">
         <h1 className="text-lg md:text-2xl font-bold text-brand-500/80">
           {scene.name || "Untitled"}
@@ -60,12 +57,18 @@ export default function SceneDetailPage({
           >
             <i className="fa-regular fa-pen-to-square"></i>Edit
           </Link>
-          <Link
-            href={`/dashboard/scenes/${params.sceneId}/delete`}
+          <button
             className="danger-button"
+            onClick={() => {
+              toast.promise(remove(ref(db, `scenes/${params.sceneId}`)), {
+                loading: `Deleting ${scene.name}`,
+                success: `Deleted ${scene.name}`,
+                error: `Failed to delete ${scene.name}`,
+              });
+            }}
           >
             <i className="fa-regular fa-trash-can"></i> Delete
-          </Link>
+          </button>
         </div>
       </div>
       <span className="text-zinc-400 text-sm">
@@ -168,7 +171,7 @@ export default function SceneDetailPage({
           />
         </div>
       </section>
-    </>
+    </div>
   );
 }
 

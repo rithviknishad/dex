@@ -1,4 +1,4 @@
-import { Inter, Roboto_Mono, Comfortaa } from "@next/font/google";
+import { Inter, Roboto_Mono, Comfortaa } from "next/font/google";
 import Script from "next/script";
 import "./globals.css";
 

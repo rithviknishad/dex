@@ -1,0 +1,82 @@
+scenes:
+  __uuid:
+    name: string
+    description: string
+    created_at: number (timestamp)
+    updated_at: number (timestamp)
+
+    energy_models:
+      sinks:
+        __uuid:
+          name: string
+          description: string
+          icon: string;
+          created_at: number (timestamp)
+          updated_at: number (timestamp)
+
+          nominal_power: number (kW)
+
+      sources:
+        __uuid:
+          name: string
+          description: string
+          icon: string;
+          created_at: number (timestamp)
+          updated_at: number (timestamp)
+
+          nominal_power: (kW)
+          type: Solar | Wind | Hydro | Geothermal | Nuclear | Fossil | Other
+
+      storages:
+        __uuid:
+          name: string
+          description: string
+          icon: string;
+          created_at: number (timestamp)
+          updated_at: number (timestamp)
+
+          capacity: number (kWh)
+          max_charge_power: number (kW)
+          max_discharge_power: number (kW)
+          round_trip_efficiency: number (ratio)
+          type: Battery - Lithium Ion | Battery - Lead Acid | Battery - Other | Pumped Hydro | Compressed Air | Other
+
+    prosumers:
+      __uuid:
+        name: string
+        description: string
+        location: number,number
+        tags: string (csv)
+        created_at: number (timestamp)
+        updated_at: number (timestamp)
+
+        energy_elements:
+          sinks:
+            __uuid:
+              model: ref<energy_models.sinks.__uuid>
+              schedules:
+                __uuid:
+                  start: string (timeofday, format HH:mm)
+                  end: string (timeofday, format HH:mm)
+                  weekdays: binary string (length 7, 1 = active, 0 = inactive, eg. 00000011 = Sat, Sun)
+                  concurrency: number
+
+          sources:
+            __uuid:
+              model: ref<energy_models.sources.__uuid>
+              schedules:
+                __uuid:
+                  start: string (timeofday, format HH:mm)
+                  end: string (timeofday, format HH:mm)
+                  weekdays: binary string (length 7, 1 = active, 0 = inactive, eg. 00000011 = Sat, Sun)
+                  concurrency: number
+
+          storages:
+            __uuid:
+              model: ref<energy_models.storages.__uuid>
+              schedules:
+                __uuid:
+                  start: string (timeofday, format HH:mm)
+                  end: string (timeofday, format HH:mm)
+                  weekdays: binary string (length 7, 1 = active, 0 = inactive, eg. 00000011 = Sat, Sun)
+                  concurrency: number
