@@ -17,3 +17,5 @@ export type Schedule = {
   // Number of concurrent instances of this schedule
   concurrency?: number;
 };
+
+export type WithRef<T> = T & { $ref: Refer<T> };
