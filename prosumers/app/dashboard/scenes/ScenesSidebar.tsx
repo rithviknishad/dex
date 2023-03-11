@@ -5,8 +5,10 @@ import { useContext, useState } from "react";
 import CreateScene from "./CreateScene";
 import SceneCard from "./SceneSidebarCard";
 import ScenesContext from "@/contexts/ScenesContext";
+import { useRouter } from "next/navigation";
 
 export default function ScenesSidebar() {
+  const router = useRouter();
   const [createScene, setCreateScene] = useState(false);
   const scenes = useContext(ScenesContext) || {};
 
@@ -17,7 +19,12 @@ export default function ScenesSidebar() {
         onClose={() => setCreateScene(false)}
         title="Scene: Create"
       >
-        <CreateScene onDone={() => setCreateScene(false)} />
+        <CreateScene
+          onDone={(id) => {
+            setCreateScene(false);
+            router.push(`/dashboard/scenes/${id}/edit`);
+          }}
+        />
       </Modal>
       <div className="sidebar">
         <div className="flex items-center justify-between mb-6">
