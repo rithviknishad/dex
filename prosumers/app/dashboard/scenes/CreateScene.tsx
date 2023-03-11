@@ -1,12 +1,14 @@
 import FirebaseContext from "@/contexts/FirebaseContext";
 import SceneContext from "@/contexts/SceneContext";
+import { Scene } from "@/types/scene";
+import { Refer } from "@/types/types";
 import { ref, serverTimestamp, set } from "firebase/database";
 import { usePathname } from "next/navigation";
 import { useContext, useState } from "react";
 import { toast } from "react-hot-toast";
 
 interface Props {
-  onDone: () => void;
+  onDone: (id: Refer<Scene>) => void;
 }
 
 export default function CreateScene({ onDone }: Props) {
@@ -23,7 +25,19 @@ export default function CreateScene({ onDone }: Props) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { db } = useContext(FirebaseContext);
 
+  const validate = () => {
+    if (!name) {
+      return "Name is required";
+    }
+  };
+
   const handleSubmit = async () => {
+    const validationError = validate();
+    if (validationError) {
+      toast.error(validationError);
+      return;
+    }
+
     setIsSubmitting(true);
     const id = sceneId || name.toLowerCase().replace(/[^a-zA-Z0-9]/g, "_");
 
@@ -55,7 +69,7 @@ export default function CreateScene({ onDone }: Props) {
     );
 
     setIsSubmitting(false);
-    onDone();
+    onDone(id);
   };
 
   return (
