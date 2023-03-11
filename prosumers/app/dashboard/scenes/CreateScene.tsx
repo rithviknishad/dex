@@ -85,6 +85,7 @@ export default function CreateScene({ onDone }: Props) {
         placeholder="e.g. Maldives Test Scene"
         value={name}
         disabled={isSubmitting}
+        required
         onChange={(e) => setName(e.target.value)}
       />
       <label
