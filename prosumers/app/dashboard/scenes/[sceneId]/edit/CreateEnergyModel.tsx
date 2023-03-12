@@ -57,8 +57,8 @@ export function CreateEnergySinkModel({ obj, onDone }: Props<EnergySinkModel>) {
 
   return (
     <form className="mt-10">
-      <div className="grid grid-cols-3 gap-4">
-        <div className="col-span-2">
+      <div className="grid grid-cols-2 gap-4">
+        <div>
           <label htmlFor="name" className="block font-medium text-zinc-200">
             Name
           </label>
@@ -74,7 +74,7 @@ export function CreateEnergySinkModel({ obj, onDone }: Props<EnergySinkModel>) {
           />
         </div>
 
-        <div className="col-span-1">
+        <div>
           <label htmlFor="icon" className="block font-medium text-zinc-200">
             Icon
           </label>
@@ -89,11 +89,13 @@ export function CreateEnergySinkModel({ obj, onDone }: Props<EnergySinkModel>) {
               value={form.icon}
               onChange={(e) => setForm("icon", e.target.value)}
             />
-            <i className={"text-white " + obj?.icon} />
+            <div className="text-brand-500 flex items-center justify-center w-5 mt-2 -ml-10">
+              <i className={form?.icon} />
+            </div>
           </div>
         </div>
 
-        <div className="col-span-2">
+        <div>
           <label
             htmlFor="nominal_power"
             className="block font-medium text-zinc-200"
@@ -107,17 +109,36 @@ export function CreateEnergySinkModel({ obj, onDone }: Props<EnergySinkModel>) {
             className="my-input mt-2"
             placeholder="Required"
             required
-            value={form.name}
+            value={form.nominal_power}
             onChange={(e) => setForm("nominal_power", e.target.valueAsNumber)}
           />
         </div>
+
+        <div className="col-span-2">
+          <label
+            htmlFor="description"
+            className="block font-medium text-zinc-200"
+          >
+            Description
+          </label>
+          <textarea
+            name="description"
+            id="description"
+            className="my-input w-full mt-2"
+            placeholder="Optional"
+            value={form.description}
+            onChange={(e) => setForm("description", e.target.value)}
+          />
+        </div>
       </div>
-      <button
-        onClick={() => handleSubmit(form)}
-        className="primary-button mt-10 place-self-end"
-      >
-        {obj ? "Update" : "Create"}
-      </button>
+      <div className="flex justify-end">
+        <button
+          onClick={() => handleSubmit(form)}
+          className="primary-button mt-10 place-self-end"
+        >
+          {obj ? "Update" : "Create"}
+        </button>
+      </div>
     </form>
   );
 }

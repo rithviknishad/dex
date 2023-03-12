@@ -61,6 +61,7 @@ export default function SceneSidebar() {
         opened={modalFor === "add-sink"}
         onClose={closeModal}
         title="Energy Demand Model: Create"
+        className="!max-w-fit"
       >
         <CreateEnergySinkModel onDone={closeModal} />
       </Modal>

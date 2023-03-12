@@ -1,3 +1,4 @@
+import classNames from "@/utils/classNames";
 import { Dialog, Transition } from "@headlessui/react";
 import { Fragment, useState } from "react";
 
@@ -6,9 +7,16 @@ interface Props {
   opened: boolean;
   onClose: () => void;
   title: string;
+  className?: string;
 }
 
-export default function Modal({ children, opened, onClose, title }: Props) {
+export default function Modal({
+  children,
+  opened,
+  onClose,
+  title,
+  className,
+}: Props) {
   return (
     <Transition appear show={opened} as={Fragment}>
       <Dialog as="div" className="relative z-10" onClose={onClose}>
@@ -35,7 +43,12 @@ export default function Modal({ children, opened, onClose, title }: Props) {
               leaveFrom="opacity-100 scale-100"
               leaveTo="opacity-0 scale-95"
             >
-              <Dialog.Panel className="w-full max-w-lg transform overflow-hidden rounded border border-brand-500 bg-black p-6 text-left align-middle shadow-xl transition-all">
+              <Dialog.Panel
+                className={classNames(
+                  "w-full max-w-lg transform overflow-hidden rounded border border-brand-500 bg-black p-6 text-left align-middle shadow-xl transition-all",
+                  className
+                )}
+              >
                 <Dialog.Title
                   as="h3"
                   className="text-xl font-bold leading-6 text-brand-500"
