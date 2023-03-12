@@ -9,7 +9,11 @@ import { redirect } from "next/navigation";
 import toDocuments from "@/utils/toDocuments";
 import ProsumerSidebarCard from "./ProsumerSidebarCard";
 import { DisclosureList, DisclosureTitle } from "@/components/Disclosure";
-import { CreateEnergySinkModel } from "./CreateEnergyModel";
+import {
+  CreateEnergySinkModel,
+  CreateEnergySourceModel,
+  CreateEnergyStorageModel,
+} from "./CreateEnergyModel";
 
 type ModalOpensFor =
   | null
@@ -61,6 +65,7 @@ export default function SceneSidebar() {
         opened={modalFor === "add-sink"}
         onClose={closeModal}
         title="Energy Demand Model: Create"
+        className="!max-w-fit"
       >
         <CreateEnergySinkModel onDone={closeModal} />
       </Modal>
@@ -68,15 +73,17 @@ export default function SceneSidebar() {
         opened={modalFor === "add-source"}
         onClose={closeModal}
         title="Energy Source Model: Create"
+        className="!max-w-fit"
       >
-        {/* <CreateScene onDone={closeModal} /> */}
+        <CreateEnergySourceModel onDone={closeModal} />
       </Modal>
       <Modal
         opened={modalFor === "add-storage"}
         onClose={closeModal}
         title="Energy Storage Model: Create"
+        className="!max-w-fit"
       >
-        {/* <CreateScene onDone={closeModal} /> */}
+        <CreateEnergyStorageModel onDone={closeModal} />
       </Modal>
       <div className="sidebar">
         <div className="flex items-center justify-between mb-6">

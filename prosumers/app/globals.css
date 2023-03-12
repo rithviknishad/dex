@@ -159,9 +159,18 @@ code {
 }
 
 .my-input {
-  @apply bg-black block py-3 px-3 text-white placeholder:text-zinc-500 ring-0 outline-none focus:outline-none disabled:bg-black/50 disabled:cursor-not-allowed shadow-none rounded-md border border-zinc-800 focus:border-zinc-500 transition-all duration-200 ease-in-out
+  @apply w-full accent-brand-500 bg-black block py-3 px-3 text-white placeholder:text-zinc-500 ring-0 outline-none focus:outline-none disabled:bg-black/50 disabled:cursor-not-allowed shadow-none rounded-md border border-zinc-800 focus:border-zinc-500 focus:ring-brand-500 transition-all duration-200 ease-in-out
 }
 
 .sidebar {
   @apply p-4 flex flex-col h-full gap-3 max-w-sm w-full overflow-auto bg-zinc-900
+}
+
+@layer base {
+  input[type='number']::-webkit-outer-spin-button,
+  input[type='number']::-webkit-inner-spin-button,
+  input[type='number'] {
+    -webkit-appearance: none;
+    -moz-appearance: textfield !important;
+  }
 }
