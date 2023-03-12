@@ -1,3 +1,4 @@
+import SidebarCard from "@/components/SidebarCard";
 import { Scene } from "@/types/scene";
 import { Refer } from "@/types/types";
 import classNames from "@/utils/classNames";
@@ -16,14 +17,7 @@ export default function SceneCard({ scene, id }: Props) {
 
   return (
     <Link href={"/dashboard/scenes/" + id}>
-      <div
-        className={classNames(
-          "group flex flex-col gap-2 p-3 w-full rounded bg-zinc-900 hover:bg-zinc-800 transition-all duration-200 ease-in-out cursor-pointer",
-          isActive
-            ? "border border-brand-500"
-            : "border border-zinc-700 hover:border-brand-500"
-        )}
-      >
+      <SidebarCard isActive={isActive}>
         <div className="flex w-full items-center justify-between">
           <h3
             id={id}
@@ -62,7 +56,7 @@ export default function SceneCard({ scene, id }: Props) {
             {Object.keys(scene.energy_models?.storages || {}).length}
           </span>
         </div>
-      </div>
+      </SidebarCard>
     </Link>
   );
 }

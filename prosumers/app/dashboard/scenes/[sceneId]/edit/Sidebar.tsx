@@ -15,6 +15,7 @@ import {
   CreateEnergyStorageModel,
 } from "./CreateEnergyModel";
 import CreateProsumer from "./CreateProsumer";
+import EnergyModelSidebarCard from "./EnergyModelSidebarCard";
 
 type ModalOpensFor =
   | null
@@ -132,8 +133,8 @@ export default function SceneSidebar() {
             length={sinks.length}
             actions={{ Add: handleOnAddClick("add-sink") }}
           />
-          <DisclosureList items={prosumers} onEmpty="No sink models.">
-            {(m) => <ProsumerSidebarCard prosumer={m} key={m.$ref} />}
+          <DisclosureList items={sinks} onEmpty="No sink models.">
+            {(m) => <EnergyModelSidebarCard sink={m} key={m.$ref} />}
           </DisclosureList>
         </Disclosure>
 
@@ -143,8 +144,8 @@ export default function SceneSidebar() {
             length={sources.length}
             actions={{ Add: handleOnAddClick("add-source") }}
           />
-          <DisclosureList items={prosumers} onEmpty="No source models.">
-            {(m) => <ProsumerSidebarCard prosumer={m} key={m.$ref} />}
+          <DisclosureList items={sources} onEmpty="No source models.">
+            {(m) => <EnergyModelSidebarCard source={m} key={m.$ref} />}
           </DisclosureList>
         </Disclosure>
 
@@ -154,10 +155,8 @@ export default function SceneSidebar() {
             length={storages.length}
             actions={{ Add: handleOnAddClick("add-storage") }}
           />
-          <DisclosureList items={prosumers} onEmpty="No storage models.">
-            {(model) => (
-              <ProsumerSidebarCard prosumer={model} key={model.$ref} />
-            )}
+          <DisclosureList items={storages} onEmpty="No storage models.">
+            {(m) => <EnergyModelSidebarCard storage={m} key={m.$ref} />}
           </DisclosureList>
         </Disclosure>
       </div>

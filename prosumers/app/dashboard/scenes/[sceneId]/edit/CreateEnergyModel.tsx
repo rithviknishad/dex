@@ -8,7 +8,7 @@ import { Refer, WithRef } from "@/types/types";
 import useFormState from "@/utils/useFormState";
 import { ref, serverTimestamp, set } from "firebase/database";
 import { usePathname } from "next/navigation";
-import { useContext, useMemo, useState } from "react";
+import { useContext, useMemo } from "react";
 import { toast } from "react-hot-toast";
 
 interface Props<T> {
@@ -62,7 +62,7 @@ export function CreateEnergySinkModel({ obj, onDone }: Props<EnergySinkModel>) {
   }, [sceneId, db, onDone]);
 
   return (
-    <form className="mt-10">
+    <form className="mt-10" onSubmit={(e) => e.preventDefault()}>
       <div className="grid grid-cols-2 gap-6">
         <div>
           <label htmlFor="name" className="block font-medium text-zinc-200">
@@ -91,7 +91,6 @@ export function CreateEnergySinkModel({ obj, onDone }: Props<EnergySinkModel>) {
               id="icon"
               className="my-input mt-2"
               placeholder="Font-awesome icon class (optional)"
-              required
               value={form.icon}
               onChange={(e) => setForm("icon", e.target.value)}
             />
@@ -191,7 +190,7 @@ export function CreateEnergySourceModel({
   }, [sceneId, db, onDone]);
 
   return (
-    <form className="mt-10">
+    <form className="mt-10" onSubmit={(e) => e.preventDefault()}>
       <div className="grid grid-cols-2 gap-6">
         <div>
           <label htmlFor="name" className="block font-medium text-zinc-200">
@@ -220,7 +219,6 @@ export function CreateEnergySourceModel({
               id="icon"
               className="my-input mt-2"
               placeholder="Font-awesome icon class (optional)"
-              required
               value={form.icon}
               onChange={(e) => setForm("icon", e.target.value)}
             />
@@ -262,6 +260,7 @@ export function CreateEnergySourceModel({
             placeholder="Required"
             onChange={(e) => setForm("type", e.target.value as any)}
           >
+            <option value="">Select</option>
             <option>Solar</option>
             <option>Wind</option>
             <option>Geothermal</option>
@@ -349,7 +348,7 @@ export function CreateEnergyStorageModel({
   }, [sceneId, db, onDone]);
 
   return (
-    <form className="mt-10">
+    <form className="mt-10" onSubmit={(e) => e.preventDefault()}>
       <div className="grid grid-cols-2 gap-6">
         <div>
           <label htmlFor="name" className="block font-medium text-zinc-200">
@@ -378,7 +377,6 @@ export function CreateEnergyStorageModel({
               id="icon"
               className="my-input mt-2"
               placeholder="Font-awesome icon class (optional)"
-              required
               value={form.icon}
               onChange={(e) => setForm("icon", e.target.value)}
             />
