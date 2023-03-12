@@ -33,19 +33,13 @@ module.exports = {
         brand: brandColor,
       },
     },
-    ringColor: {
-      DEFAULT: brandColor[500],
-    },
-    ringOffsetColor: {
-      DEFAULT: brandColor[500],
-    },
     outlineColor: {
       DEFAULT: brandColor[500],
     },
   },
   plugins: [
     require("@tailwindcss/typography"),
-    // require("@tailwindcss/forms"),
+    require("@tailwindcss/forms"),
     require("@headlessui/tailwindcss")({ prefix: "ui" }),
   ],
 };

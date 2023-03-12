@@ -9,7 +9,10 @@ import { redirect } from "next/navigation";
 import toDocuments from "@/utils/toDocuments";
 import ProsumerSidebarCard from "./ProsumerSidebarCard";
 import { DisclosureList, DisclosureTitle } from "@/components/Disclosure";
-import { CreateEnergySinkModel } from "./CreateEnergyModel";
+import {
+  CreateEnergySinkModel,
+  CreateEnergySourceModel,
+} from "./CreateEnergyModel";
 
 type ModalOpensFor =
   | null
@@ -69,8 +72,9 @@ export default function SceneSidebar() {
         opened={modalFor === "add-source"}
         onClose={closeModal}
         title="Energy Source Model: Create"
+        className="!max-w-fit"
       >
-        {/* <CreateScene onDone={closeModal} /> */}
+        <CreateEnergySourceModel onDone={closeModal} />
       </Modal>
       <Modal
         opened={modalFor === "add-storage"}
