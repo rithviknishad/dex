@@ -12,6 +12,7 @@ import { DisclosureList, DisclosureTitle } from "@/components/Disclosure";
 import {
   CreateEnergySinkModel,
   CreateEnergySourceModel,
+  CreateEnergyStorageModel,
 } from "./CreateEnergyModel";
 
 type ModalOpensFor =
@@ -80,8 +81,9 @@ export default function SceneSidebar() {
         opened={modalFor === "add-storage"}
         onClose={closeModal}
         title="Energy Storage Model: Create"
+        className="!max-w-fit"
       >
-        {/* <CreateScene onDone={closeModal} /> */}
+        <CreateEnergyStorageModel onDone={closeModal} />
       </Modal>
       <div className="sidebar">
         <div className="flex items-center justify-between mb-6">
