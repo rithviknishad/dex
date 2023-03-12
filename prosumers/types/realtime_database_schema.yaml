@@ -50,7 +50,7 @@ scenes:
         created_at: number (timestamp)
         updated_at: number (timestamp)
 
-        energy_elements:
+        elements:
           sinks:
             __uuid:
               model: ref<energy_models.sinks.__uuid>

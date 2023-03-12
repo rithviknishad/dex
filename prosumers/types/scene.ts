@@ -1,26 +1,23 @@
 import { Collection, Coordinates, Refer, Schedule, Timestamp } from "./types";
 
 interface BaseModel {
+  name: string;
+  description: string;
+  icon?: string;
   created_at: Timestamp;
   updated_at: Timestamp;
 }
 
-interface EnergyBaseModel extends BaseModel {
-  name: string;
-  description: string;
-  icon: string;
-}
-
-export interface EnergySinkModel extends EnergyBaseModel {
+export interface EnergySinkModel extends BaseModel {
   nominal_power: number;
 }
 
-export interface EnergySourceModel extends EnergyBaseModel {
+export interface EnergySourceModel extends BaseModel {
   nominal_power: number;
   type: "Solar" | "Wind" | "Hydro" | "Geothermal" | "Nuclear" | "Fossil";
 }
 
-export interface EnergyStorageModel extends EnergyBaseModel {
+export interface EnergyStorageModel extends BaseModel {
   type: "Lithium Ion" | "Lead Acid" | "Flywheel";
   capacity: number;
   max_charge_power: number;
@@ -28,7 +25,9 @@ export interface EnergyStorageModel extends EnergyBaseModel {
   round_trip_efficiency: number;
 }
 
-export interface ProsumerEnergyModel<T extends EnergyBaseModel> {
+export interface ProsumerEnergyModel<
+  T extends EnergySinkModel | EnergySourceModel | EnergyStorageModel
+> {
   model: Refer<T>;
   schedules?: Collection<Schedule>;
 }
@@ -39,7 +38,7 @@ export interface ProsumerModel extends BaseModel {
   location: Coordinates;
   tags: string;
 
-  energy_elements?: {
+  elements?: {
     sinks?: Collection<ProsumerEnergyModel<EnergySinkModel>>;
     sources?: Collection<ProsumerEnergyModel<EnergySourceModel>>;
     storages?: Collection<ProsumerEnergyModel<EnergyStorageModel>>;

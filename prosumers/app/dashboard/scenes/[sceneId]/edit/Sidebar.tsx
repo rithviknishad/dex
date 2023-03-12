@@ -14,6 +14,7 @@ import {
   CreateEnergySourceModel,
   CreateEnergyStorageModel,
 } from "./CreateEnergyModel";
+import CreateProsumer from "./CreateProsumer";
 
 type ModalOpensFor =
   | null
@@ -58,8 +59,9 @@ export default function SceneSidebar() {
         opened={modalFor === "add-prosumer"}
         onClose={closeModal}
         title="Prosumer: Create"
+        className="!max-w-fit"
       >
-        {/* <CreateScene onDone={closeModal} /> */}
+        <CreateProsumer onDone={closeModal} />
       </Modal>
       <Modal
         opened={modalFor === "add-sink"}

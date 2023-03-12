@@ -51,15 +51,15 @@ export default function ProsumerSidebarCard({ prosumer }: Props) {
         <div className="flex items-center justify-start font-medium tracking-wider text-brand-800 group-hover:text-brand-700 transition-all duration-200 ease-in-out">
           <i className="fa-solid fa-plug fa-sm ml-4"></i>
           <span className="text-sm ml-1.5">
-            {Object.keys(prosumer.energy_elements?.sources || {}).length}
+            {Object.keys(prosumer.elements?.sources || {}).length}
           </span>
           <i className="fa-solid fa-lightbulb fa-sm ml-4"></i>
           <span className="text-sm ml-1.5">
-            {Object.keys(prosumer.energy_elements?.sinks || {}).length}
+            {Object.keys(prosumer.elements?.sinks || {}).length}
           </span>
           <i className="fa-solid fa-car-battery fa-sm ml-4"></i>
           <span className="text-sm ml-1.5">
-            {Object.keys(prosumer.energy_elements?.storages || {}).length}
+            {Object.keys(prosumer.elements?.storages || {}).length}
           </span>
         </div>
       </div>
