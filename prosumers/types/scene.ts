@@ -38,7 +38,7 @@ export interface ProsumerModel extends BaseModel {
   location: Coordinates;
   tags: string;
 
-  energy_elements?: {
+  elements?: {
     sinks?: Collection<ProsumerEnergyModel<EnergySinkModel>>;
     sources?: Collection<ProsumerEnergyModel<EnergySourceModel>>;
     storages?: Collection<ProsumerEnergyModel<EnergyStorageModel>>;

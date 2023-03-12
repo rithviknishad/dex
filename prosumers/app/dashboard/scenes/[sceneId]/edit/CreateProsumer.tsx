@@ -168,7 +168,7 @@ export default function CreateProsumer({ obj, onDone }: Props) {
             className="my-input mt-2"
             placeholder="Comma seperated labels. (Optional)"
             required
-            value={form.name}
+            value={form.tags}
             onChange={(e) => setForm("tags", e.target.value)}
           />
         </div>
