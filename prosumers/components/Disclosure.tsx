@@ -11,7 +11,7 @@ export const DisclosureTitle = ({
   actions: { [key: string]: MouseEventHandler<HTMLButtonElement> };
 }) => {
   return (
-    <Disclosure.Button className="flex w-full items-center justify-between rounded-lg px-4 py-2 text-left text-sm font-medium border border-zinc-800 text-zinc-200 hover:bg-zinc-800 focus:outline-none focus-visible:ring focus-visible:ring-zinc-500 focus-visible:ring-opacity-75">
+    <Disclosure.Button className="mt-6 flex w-full items-center justify-between rounded px-4 py-2 text-left text-sm font-medium border border-zinc-800 text-zinc-200 bg-zinc-800 hover:bg-zinc-900 focus:outline-none focus-visible:ring focus-visible:ring-zinc-500 focus-visible:ring-opacity-75">
       <div>
         <span>{title}</span>
         <span className="ml-2 tracking-widest text-zinc-400">({length})</span>
@@ -46,7 +46,7 @@ export const DisclosureContent = ({
       leaveFrom="transform translate-y-0 opacity-100"
       leaveTo="transform -translate-y-2 opacity-0"
     >
-      <Disclosure.Panel className="flex flex-col gap-2 px-2 text-sm text-gray-500">
+      <Disclosure.Panel className="flex flex-col gap-2 text-sm text-gray-500">
         {children}
       </Disclosure.Panel>
     </Transition>
