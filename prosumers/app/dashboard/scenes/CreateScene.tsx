@@ -2,9 +2,9 @@ import FirebaseContext from "@/contexts/FirebaseContext";
 import SceneContext from "@/contexts/SceneContext";
 import { Scene } from "@/types/scene";
 import { Refer } from "@/types/types";
-import { ref, serverTimestamp, set } from "firebase/database";
+import { ref, serverTimestamp, set, remove } from "firebase/database";
 import { usePathname } from "next/navigation";
-import { useContext, useState } from "react";
+import { useCallback, useContext, useState } from "react";
 import { toast } from "react-hot-toast";
 
 interface Props {
@@ -72,6 +72,16 @@ export default function CreateScene({ onDone }: Props) {
     onDone(id);
   };
 
+  const handleDelete = useCallback(() => {
+    if (!scene) return;
+    toast.promise(remove(ref(db, `scenes/${sceneId}`)), {
+      loading: "Deleting...",
+      error: "Failed to delete",
+      success: "Deleted",
+    });
+    onDone("");
+  }, [scene, onDone, db, sceneId]);
+
   return (
     <div className="flex flex-col mt-10">
       <label htmlFor="name" className="block font-medium text-zinc-200">
@@ -104,13 +114,20 @@ export default function CreateScene({ onDone }: Props) {
         onChange={(e) => setDescription(e.target.value)}
       />
 
-      <button
-        onClick={handleSubmit}
-        disabled={isSubmitting}
-        className="primary-button mt-10 place-self-end"
-      >
-        {scene ? "Update" : "Create"}
-      </button>
+      <div className="flex gap-2 justify-end mt-10">
+        {scene && (
+          <button className="danger-button" onClick={handleDelete}>
+            Delete
+          </button>
+        )}
+        <button
+          onClick={handleSubmit}
+          disabled={isSubmitting}
+          className="primary-button"
+        >
+          {scene ? "Update" : "Create"}
+        </button>
+      </div>
     </div>
   );
 }
