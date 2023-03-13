@@ -1,7 +1,7 @@
 "use client";
 
 import Modal from "@/components/Modal";
-import { MouseEventHandler, useContext, useState } from "react";
+import { MouseEventHandler, useContext, useMemo, useState } from "react";
 import SceneContext from "@/contexts/SceneContext";
 import CreateScene from "../../CreateScene";
 import { Disclosure, Transition } from "@headlessui/react";
@@ -15,6 +15,7 @@ import {
   CreateEnergyStorageModel,
 } from "./CreateEnergyModel";
 import CreateProsumer from "./CreateProsumer";
+import EnergyModelSidebarCard from "./EnergyModelSidebarCard";
 
 type ModalOpensFor =
   | null
@@ -25,6 +26,7 @@ type ModalOpensFor =
   | "add-storage";
 
 export default function SceneSidebar() {
+  const [searchQuery, setSearchQuery] = useState("");
   const [modalFor, showModalFor] = useState<ModalOpensFor>(null);
   const scene = useContext(SceneContext);
 
@@ -41,10 +43,16 @@ export default function SceneSidebar() {
 
   const closeModal = () => showModalFor(null);
 
-  const prosumers = toDocuments(scene.prosumers || {});
-  const sinks = toDocuments(scene.energy_models?.sinks || {});
-  const sources = toDocuments(scene.energy_models?.sources || {});
-  const storages = toDocuments(scene.energy_models?.storages || {});
+  const _ = useMemo(() => {
+    const searchQueryLC = searchQuery.toLowerCase();
+    return (obj: { name: string }) =>
+      obj.name.toLowerCase().includes(searchQueryLC);
+  }, [searchQuery]);
+
+  const prosumers = toDocuments(scene.prosumers || {}).filter(_);
+  const sinks = toDocuments(scene.energy_models?.sinks || {}).filter(_);
+  const sources = toDocuments(scene.energy_models?.sources || {}).filter(_);
+  const storages = toDocuments(scene.energy_models?.storages || {}).filter(_);
 
   return (
     <>
@@ -98,6 +106,14 @@ export default function SceneSidebar() {
           </button>
         </div>
 
+        <input
+          className="my-input -my-2"
+          type="search"
+          placeholder="Search"
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+        />
+
         <Disclosure defaultOpen>
           <DisclosureTitle
             title="Prosumers"
@@ -117,8 +133,8 @@ export default function SceneSidebar() {
             length={sinks.length}
             actions={{ Add: handleOnAddClick("add-sink") }}
           />
-          <DisclosureList items={prosumers} onEmpty="No sink models.">
-            {(m) => <ProsumerSidebarCard prosumer={m} key={m.$ref} />}
+          <DisclosureList items={sinks} onEmpty="No sink models.">
+            {(m) => <EnergyModelSidebarCard sink={m} key={m.$ref} />}
           </DisclosureList>
         </Disclosure>
 
@@ -128,8 +144,8 @@ export default function SceneSidebar() {
             length={sources.length}
             actions={{ Add: handleOnAddClick("add-source") }}
           />
-          <DisclosureList items={prosumers} onEmpty="No source models.">
-            {(m) => <ProsumerSidebarCard prosumer={m} key={m.$ref} />}
+          <DisclosureList items={sources} onEmpty="No source models.">
+            {(m) => <EnergyModelSidebarCard source={m} key={m.$ref} />}
           </DisclosureList>
         </Disclosure>
 
@@ -139,10 +155,8 @@ export default function SceneSidebar() {
             length={storages.length}
             actions={{ Add: handleOnAddClick("add-storage") }}
           />
-          <DisclosureList items={prosumers} onEmpty="No storage models.">
-            {(model) => (
-              <ProsumerSidebarCard prosumer={model} key={model.$ref} />
-            )}
+          <DisclosureList items={storages} onEmpty="No storage models.">
+            {(m) => <EnergyModelSidebarCard storage={m} key={m.$ref} />}
           </DisclosureList>
         </Disclosure>
       </div>
