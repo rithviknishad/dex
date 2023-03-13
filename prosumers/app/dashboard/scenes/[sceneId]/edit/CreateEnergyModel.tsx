@@ -6,9 +6,9 @@ import {
 } from "@/types/scene";
 import { Refer, WithRef } from "@/types/types";
 import useFormState from "@/utils/useFormState";
-import { ref, serverTimestamp, set } from "firebase/database";
+import { ref, serverTimestamp, set, remove } from "firebase/database";
 import { usePathname } from "next/navigation";
-import { useContext, useMemo } from "react";
+import { useCallback, useContext, useMemo } from "react";
 import { toast } from "react-hot-toast";
 
 interface Props<T> {
@@ -60,6 +60,18 @@ export function CreateEnergySinkModel({ obj, onDone }: Props<EnergySinkModel>) {
       onDone(id);
     };
   }, [sceneId, db, onDone]);
+
+  const handleDelete = useCallback(() => {
+    if (!obj) return;
+    toast.promise(
+      remove(ref(db, `scenes/${sceneId}/energy_models/sinks/${obj.$ref}`)),
+      {
+        loading: "Deleting...",
+        error: "Failed to delete",
+        success: "Deleted",
+      }
+    );
+  }, [obj, db, sceneId]);
 
   return (
     <form className="mt-10" onSubmit={(e) => e.preventDefault()}>
@@ -136,11 +148,13 @@ export function CreateEnergySinkModel({ obj, onDone }: Props<EnergySinkModel>) {
           />
         </div>
       </div>
-      <div className="flex justify-end">
-        <button
-          onClick={() => handleSubmit(form)}
-          className="primary-button mt-10 place-self-end"
-        >
+      <div className="flex gap-2 justify-end mt-10">
+        {obj && (
+          <button className="danger-button" onClick={handleDelete}>
+            Delete
+          </button>
+        )}
+        <button onClick={() => handleSubmit(form)} className="primary-button">
           {obj ? "Update" : "Create"}
         </button>
       </div>
@@ -188,6 +202,18 @@ export function CreateEnergySourceModel({
       onDone(id);
     };
   }, [sceneId, db, onDone]);
+
+  const handleDelete = useCallback(() => {
+    if (!obj) return;
+    toast.promise(
+      remove(ref(db, `scenes/${sceneId}/energy_models/sources/${obj.$ref}`)),
+      {
+        loading: "Deleting...",
+        error: "Failed to delete",
+        success: "Deleted",
+      }
+    );
+  }, [obj, db, sceneId]);
 
   return (
     <form className="mt-10" onSubmit={(e) => e.preventDefault()}>
@@ -286,11 +312,13 @@ export function CreateEnergySourceModel({
           />
         </div>
       </div>
-      <div className="flex justify-end">
-        <button
-          onClick={() => handleSubmit(form)}
-          className="primary-button mt-10 place-self-end"
-        >
+      <div className="flex gap-2 justify-end mt-10">
+        {obj && (
+          <button className="danger-button" onClick={handleDelete}>
+            Delete
+          </button>
+        )}
+        <button onClick={() => handleSubmit(form)} className="primary-button">
           {obj ? "Update" : "Create"}
         </button>
       </div>
@@ -346,6 +374,18 @@ export function CreateEnergyStorageModel({
       onDone(id);
     };
   }, [sceneId, db, onDone]);
+
+  const handleDelete = useCallback(() => {
+    if (!obj) return;
+    toast.promise(
+      remove(ref(db, `scenes/${sceneId}/energy_models/storages/${obj.$ref}`)),
+      {
+        loading: "Deleting...",
+        error: "Failed to delete",
+        success: "Deleted",
+      }
+    );
+  }, [obj, db, sceneId]);
 
   return (
     <form className="mt-10" onSubmit={(e) => e.preventDefault()}>
@@ -504,11 +544,13 @@ export function CreateEnergyStorageModel({
           />
         </div>
       </div>
-      <div className="flex justify-end">
-        <button
-          onClick={() => handleSubmit(form)}
-          className="primary-button mt-10 place-self-end"
-        >
+      <div className="flex gap-2 justify-end mt-10">
+        {obj && (
+          <button className="danger-button" onClick={handleDelete}>
+            Delete
+          </button>
+        )}
+        <button onClick={() => handleSubmit(form)} className="primary-button">
           {obj ? "Update" : "Create"}
         </button>
       </div>
