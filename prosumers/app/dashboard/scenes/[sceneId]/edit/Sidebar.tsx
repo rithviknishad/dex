@@ -25,7 +25,9 @@ type ModalOpensFor =
   | "add-source"
   | "add-storage";
 
-export default function SceneSidebar() {
+export default function SceneSidebar(props: {
+  onProsumerSelect?: (prosumer: any) => void;
+}) {
   const [searchQuery, setSearchQuery] = useState("");
   const [modalFor, showModalFor] = useState<ModalOpensFor>(null);
   const scene = useContext(SceneContext);
@@ -122,7 +124,11 @@ export default function SceneSidebar() {
           />
           <DisclosureList items={prosumers} onEmpty="No prosumers.">
             {(prosumer) => (
-              <ProsumerSidebarCard prosumer={prosumer} key={prosumer.$ref} />
+              <ProsumerSidebarCard
+                prosumer={prosumer}
+                key={prosumer.$ref}
+                onClick={() => props.onProsumerSelect?.(prosumer)}
+              />
             )}
           </DisclosureList>
         </Disclosure>
