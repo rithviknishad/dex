@@ -3,9 +3,9 @@ import { ProsumerModel } from "@/types/scene";
 import { Refer, WithRef } from "@/types/types";
 import parseCoordinates from "@/utils/parseCoordinates";
 import useFormState from "@/utils/useFormState";
-import { ref, serverTimestamp, set } from "firebase/database";
+import { ref, serverTimestamp, set, remove } from "firebase/database";
 import { usePathname } from "next/navigation";
-import { useContext, useMemo } from "react";
+import { useCallback, useContext, useMemo } from "react";
 import { toast } from "react-hot-toast";
 
 interface Props {
@@ -55,6 +55,15 @@ export default function CreateProsumer({ obj, onDone }: Props) {
       onDone(id);
     };
   }, [sceneId, db, onDone]);
+
+  const handleDelete = useCallback(() => {
+    if (!obj) return;
+    toast.promise(remove(ref(db, `scenes/${sceneId}/prosumers/${obj.$ref}`)), {
+      loading: "Deleting...",
+      error: "Failed to delete",
+      success: "Deleted",
+    });
+  }, [obj, db, sceneId]);
 
   const { latitude, longitude } = parseCoordinates(form.location ?? "0,0");
 
@@ -173,7 +182,12 @@ export default function CreateProsumer({ obj, onDone }: Props) {
           />
         </div>
       </div>
-      <div className="flex justify-end">
+      <div className="flex gap-2 justify-end">
+        {obj && (
+          <button className="danger-button" onClick={handleDelete}>
+            Delete
+          </button>
+        )}
         <button
           onClick={() => handleSubmit(form)}
           className="primary-button mt-10 place-self-end"
