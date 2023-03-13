@@ -67,9 +67,7 @@ export const DisclosureList = <T,>({
       {items.length ? (
         items.map(children)
       ) : (
-        <div className="flex w-full py-4 items-center justify-center">
-          {onEmpty}
-        </div>
+        <div className="flex w-full items-center justify-center">{onEmpty}</div>
       )}
     </DisclosureContent>
   );

@@ -322,7 +322,7 @@ export function CreateEnergyStorageModel({
         return "Max. discharge power must be greater than 0 kW";
       if (!_.round_trip_efficiency) return "Round-trip efficiency is required.";
       if (!(0 < _.round_trip_efficiency && _.round_trip_efficiency <= 1))
-        return "Must follow: 0.00 < round_trip_efficiency < 1.00";
+        return "Must follow: 0.00 < round_trip_efficiency < 100.00";
     };
 
     return async ({ $ref, ...obj }: typeof form) => {
@@ -415,6 +415,7 @@ export function CreateEnergyStorageModel({
             placeholder="Required"
             onChange={(e) => setForm("type", e.target.value as any)}
           >
+            <option value="">Select</option>
             <option>Lithium Ion</option>
             <option>Lead Acid</option>
             <option>Flywheel</option>
@@ -475,11 +476,13 @@ export function CreateEnergyStorageModel({
             name="round_trip_efficiency"
             id="round_trip_efficiency"
             className="my-input mt-2"
-            placeholder="Required. Eg. '0.95' signifies 95%"
+            placeholder="Required. 0 < value < 100"
             required
-            value={form.round_trip_efficiency}
+            value={(form.round_trip_efficiency ?? 0) * 1e2}
+            min={0}
+            max={100}
             onChange={(e) =>
-              setForm("round_trip_efficiency", e.target.valueAsNumber)
+              setForm("round_trip_efficiency", e.target.valueAsNumber * 1e-2)
             }
           />
         </div>

@@ -77,7 +77,9 @@ export default function EnergyModelSidebarCard({
             {obj.name}
           </h3>
           <p className="text-xs text-zinc-500 group-hover:text-zinc-400">
-            <span>updated </span>
+            <span>
+              {obj.updated_at === obj.created_at ? "created" : "updated"}{" "}
+            </span>
             <RelativeTime time={new Date(obj.updated_at).toISOString()} />
           </p>
         </div>
