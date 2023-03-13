@@ -71,7 +71,8 @@ export function CreateEnergySinkModel({ obj, onDone }: Props<EnergySinkModel>) {
         success: "Deleted",
       }
     );
-  }, [obj, db, sceneId]);
+    onDone("");
+  }, [obj, onDone, db, sceneId]);
 
   return (
     <form className="mt-10" onSubmit={(e) => e.preventDefault()}>
@@ -213,7 +214,8 @@ export function CreateEnergySourceModel({
         success: "Deleted",
       }
     );
-  }, [obj, db, sceneId]);
+    onDone("");
+  }, [obj, onDone, db, sceneId]);
 
   return (
     <form className="mt-10" onSubmit={(e) => e.preventDefault()}>
@@ -385,7 +387,8 @@ export function CreateEnergyStorageModel({
         success: "Deleted",
       }
     );
-  }, [obj, db, sceneId]);
+    onDone("");
+  }, [obj, onDone, db, sceneId]);
 
   return (
     <form className="mt-10" onSubmit={(e) => e.preventDefault()}>
