@@ -2,11 +2,12 @@
 
 import FirebaseContext from "@/contexts/FirebaseContext";
 import SceneContext from "@/contexts/SceneContext";
+import classNames from "@/utils/classNames";
 import { ref, remove } from "firebase/database";
 
 import Link from "next/link";
-import { redirect } from "next/navigation";
-import { ReactNode, useContext } from "react";
+import { redirect, usePathname } from "next/navigation";
+import { ReactNode, useContext, useState } from "react";
 import { toast } from "react-hot-toast";
 
 export default function SceneDetailPage({
@@ -16,6 +17,8 @@ export default function SceneDetailPage({
 }) {
   const scene = useContext(SceneContext);
   const { db } = useContext(FirebaseContext);
+  const pathSegments = usePathname().split("/");
+  const isEditing = pathSegments[2] === "scenes" && pathSegments[4] === "edit";
 
   if (!scene) {
     redirect("/dashboard/scenes");
@@ -50,7 +53,7 @@ export default function SceneDetailPage({
         <h1 className="text-lg md:text-2xl font-bold text-brand-500/80">
           {scene.name || "Untitled"}
         </h1>
-        <div className="flex gap-2">
+        <div className={classNames(isEditing ? "hidden" : "flex", "gap-2")}>
           <Link
             href={`/dashboard/scenes/${params.sceneId}/edit`}
             className="primary-button"

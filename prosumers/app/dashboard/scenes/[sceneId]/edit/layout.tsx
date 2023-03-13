@@ -10,7 +10,7 @@ export default function EditSceneLayout({
   return (
     <div className="flex flex-row h-full w-full">
       <SceneSidebar />
-      <div className="px-8 py-6 h-full w-full">{children}</div>
+      <div className="h-full w-full">{children}</div>
     </div>
   );
 }
