@@ -182,7 +182,7 @@ export default function CreateProsumer({ obj, onDone }: Props) {
           />
         </div>
       </div>
-      <div className="flex gap-2 justify-end">
+      <div className="flex gap-2 justify-end mt-10">
         {obj && (
           <button className="danger-button" onClick={handleDelete}>
             Delete
@@ -190,7 +190,7 @@ export default function CreateProsumer({ obj, onDone }: Props) {
         )}
         <button
           onClick={() => handleSubmit(form)}
-          className="primary-button mt-10 place-self-end"
+          className="primary-button place-self-end"
         >
           {obj ? "Update" : "Create"}
         </button>
