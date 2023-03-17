@@ -127,7 +127,7 @@ export default function SceneSidebar(props: {
               <ProsumerSidebarCard
                 prosumer={prosumer}
                 key={prosumer.$ref}
-                onClick={() => props.onProsumerSelect?.(prosumer)}
+                onClick={() => props.onProsumerSelect?.(prosumer.$ref)}
               />
             )}
           </DisclosureList>

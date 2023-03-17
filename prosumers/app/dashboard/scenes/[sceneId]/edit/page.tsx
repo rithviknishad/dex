@@ -10,6 +10,7 @@ import { useRouter } from "next/navigation";
 import Modal from "@/components/Modal";
 import CreateProsumer from "./CreateProsumer";
 import parseCoordinates from "@/utils/parseCoordinates";
+import RelativeTime from "@/components/RelativeTime";
 
 export default function EditScenePage({
   params: { sceneId },
@@ -35,14 +36,27 @@ export default function EditScenePage({
         opened={editProsumer}
         onClose={() => setEditProsumer(false)}
       >
-        <CreateProsumer onDone={refresh} obj={prosumer} />
+        <CreateProsumer
+          onDone={() => {
+            setEditProsumer(false);
+            refresh();
+          }}
+          obj={prosumer}
+        />
       </Modal>
       <div className="flex items-center justify-between">
         <h1 className="text-lg md:text-2xl font-bold text-brand-500/80">
           Prosumer: {prosumer.name || "Untitled"}
         </h1>
-        <div className="flex gap-2">
-          <button className="primary-button">
+        <div className="flex items-center gap-2">
+          <p className="text-sm text-zinc-500 group-hover:text-zinc-400 mr-4">
+            <span>updated </span>
+            <RelativeTime time={new Date(prosumer.updated_at).toISOString()} />
+          </p>
+          <button
+            className="primary-button"
+            onClick={() => setEditProsumer(true)}
+          >
             <i className="fa-regular fa-pen-to-square"></i>Edit
           </button>
           <button
