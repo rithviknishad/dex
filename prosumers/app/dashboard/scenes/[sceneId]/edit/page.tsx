@@ -11,6 +11,8 @@ import Modal from "@/components/Modal";
 import CreateProsumer from "./CreateProsumer";
 import parseCoordinates from "@/utils/parseCoordinates";
 import RelativeTime from "@/components/RelativeTime";
+import toDocuments from "@/utils/toDocuments";
+import StickyHeadTable from "@/components/StickyHeadTable";
 
 export default function EditScenePage({
   params: { sceneId },
@@ -27,6 +29,12 @@ export default function EditScenePage({
   }
 
   const location = parseCoordinates(prosumer.location);
+
+  const elements = [
+    ...toDocuments(prosumer.elements?.sinks || {}),
+    ...toDocuments(prosumer.elements?.sources || {}),
+    ...toDocuments(prosumer.elements?.storages || {}),
+  ] as Record<string, any>[];
 
   return (
     <div className="px-8 py-6">
@@ -84,6 +92,20 @@ export default function EditScenePage({
           {location.latitude.toFixed(4)}° N {location.longitude.toFixed(4)}° E
         </span>
       </p>
+      <div className="mt-10">
+        <StickyHeadTable
+          title="Elements"
+          theads={{
+            icon: "",
+            name: "Name",
+            type: "Type",
+            model: "Model",
+            schedules: "Schedules",
+            actions: "",
+          }}
+          trows={elements}
+        />
+      </div>
     </div>
   );
 }
