@@ -7,7 +7,7 @@ export default function Home() {
       <div className="flex flex-col gap-10">
         <div className={styles.center}>
           <span className="font-bold text-2xl text-brand-500 tracking-widest">
-            Vaidyuti
+            Decentralized Energy Exchange
           </span>
           <div className={styles.dex}>
             <span className="font-bold text-brand-400 tracking-widest">

@@ -19,7 +19,7 @@ export default function Navbar() {
               <div className="relative z-10 flex px-2 lg:px-0 overflow-clip">
                 <div className="flex flex-shrink-0 items-center">
                   <p className="text-brand-500 text-sm md:text-lg font-display font-bold tracking-wide">
-                    Vaidyuti
+                    DEX
                   </p>
                   {/* <Image
                     height={96}
