@@ -1,0 +1,35 @@
+version: "3.9"
+
+networks:
+  default:
+    name: dex
+
+volumes:
+  postgres-data:
+
+services:
+  p2p-exchange-server:
+    depends_on:
+      - db
+    build:
+      context: .
+      dockerfile: docker/DevDockerfile
+    entrypoint: ["bash", "docker/docker-entrypoint.sh"]
+    ports:
+      - 9000:9000
+    env_file:
+      - ./docker/.local.env
+    volumes:
+      - .:/app
+
+  db:
+    image: postgres:latest
+    restart: always
+    env_file:
+      - ./docker/.local.env
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+
+  redis:
+    image: redis:alpine
+    restart: always
