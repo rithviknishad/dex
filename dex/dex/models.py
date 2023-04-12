@@ -1,6 +1,15 @@
 from django.db import models
+from django.contrib.postgres.operations import CreateExtension
+from django.db import migrations
+from django.contrib.gis.db.models import PointField
 from utils.models import BaseModel, UUIDModel
 from sparks.models import SparksField
+
+
+class Migration(migrations.Migration):
+    operations = [
+        CreateExtension("postgis"),
+    ]
 
 
 class EnergyField(models.BigIntegerField):
@@ -37,6 +46,12 @@ class Prosumer(BaseModel, UUIDModel):
         blank=True,
         verbose_name="Description",
         help_text="A short brief about the prosumer",
+    )
+    location = PointField(
+        blank=False,
+        null=False,
+        verbose_name="Location",
+        help_text="Location of the prosumer",
     )
 
     def __str__(self):
