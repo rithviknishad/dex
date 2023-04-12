@@ -8,7 +8,7 @@ volumes:
   postgres-data:
 
 services:
-  p2p-exchange-server:
+  api:
     depends_on:
       - db
     build:

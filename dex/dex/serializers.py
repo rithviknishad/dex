@@ -1,54 +1,48 @@
 from rest_framework import serializers
 
 from .models import BuyOrder, Prosumer, SellOrder, Trade
+from utils import BASE_READ_ONLY_FIELDS
 
 
-class BuyOrderSerializer(serializers.HyperlinkedModelSerializer):
-    class Meta:
-        model = BuyOrder
-        fields = (
-            "url",
-            "prosumer",
-            "energy",
-            "status",
-            "category",
-            "duration",
-        )
-        read_only_fields = (
-            "prosumer",
-            "status",
-        )
-
-
-class ProsumerSerializer(serializers.HyperlinkedModelSerializer):
+class ProsumerSerializer(serializers.ModelSerializer):
     class Meta:
         model = Prosumer
         fields = (
-            "url",
             "billing_account",
             "name",
             "description",
-        )
-        read_only_fields = ("billing_account",)
+        ) + BASE_READ_ONLY_FIELDS
+        read_only_fields = BASE_READ_ONLY_FIELDS + ("billing_account",)
 
 
-class SellOrderSerializer(serializers.HyperlinkedModelSerializer):
+class OrderSerialzierBase:
+    FIELDS = ("prosumer", "energy", "status") + BASE_READ_ONLY_FIELDS
+    READ_ONLY_FIELDS = ("prosumer", "status") + BASE_READ_ONLY_FIELDS
+
+
+class BuyOrderSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = BuyOrder
+        fields = OrderSerialzierBase.FIELDS + ("category",)
+        read_only_fields = OrderSerialzierBase.READ_ONLY_FIELDS
+
+
+class SellOrderSerializer(serializers.ModelSerializer):
     class Meta:
         model = SellOrder
-        fields = (
-            "url",
-            "prosumer",
-        )
+        fields = OrderSerialzierBase.FIELDS + ("category", "price")
+        read_only_fields = OrderSerialzierBase.READ_ONLY_FIELDS
 
 
-class TradeSerializer(serializers.HyperlinkedModelSerializer):
+class TradeSerializer(serializers.ModelSerializer):
     class Meta:
         model = Trade
-        fields = (
-            "url",
-            "buy_order",
-            "sell_order",
+        fields = BASE_READ_ONLY_FIELDS + (
+            "buy",
+            "sell",
             "price",
             "transmission_losses",
             "total_energy",
+            "cashflow_status",
         )
+        read_only_fields = fields

@@ -277,3 +277,5 @@ vems/media/
 .env
 .envs/*
 !.envs/.local/
+
+static
