@@ -13,6 +13,11 @@ const navigation = {
     href: "/prosumers",
     icon: "fa-solid fa-lightbulb",
   },
+  trades: {
+    name: "Trades",
+    href: "/trades",
+    icon: "fa-solid fa-arrow-right-arrow-left",
+  },
   wallet: {
     name: "Sparks Wallet",
     href: "/wallet",

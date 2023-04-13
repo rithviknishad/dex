@@ -1,5 +1,7 @@
-import fireRequest from "./fireRequest";
-import { JWTAuth } from "./models";
+import fireRequest, { modelEndpoints } from "./fireRequest";
+import { JWTAuth, ModelPK } from "./models";
+import { BuyOrder, Prosumer, SellOrder } from "./models/Prosumers";
+import { Trade } from "./models/Trades";
 
 /**
  * Authentication related endpoints.
@@ -33,4 +35,34 @@ export const Auth = {
     update: (data: Partial<JWTAuth.BillingAccount>) =>
       fireRequest<JWTAuth.BillingAccount>("PATCH /api/v1/auth/user/", data),
   },
+};
+
+export const Prosumers = {
+  ...modelEndpoints<Prosumer>("/api/v1/prosumers/"),
+
+  buyOrders: (prosumer_id: ModelPK) => {
+    const { list, create, read } = modelEndpoints<BuyOrder>(
+      `/api/v1/prosumers/${prosumer_id}/buy/`
+    );
+    return { list, create, read };
+  },
+
+  sellOrders: (prosumer_id: ModelPK) => {
+    const { list, create, read } = modelEndpoints<SellOrder>(
+      `/api/v1/prosumers/${prosumer_id}/sell/`
+    );
+    return { list, create, read };
+  },
+
+  trades: (prosumer_id: ModelPK) => {
+    const { list, read } = modelEndpoints<Trade>(
+      `/api/v1/prosumers/${prosumer_id}/trades/`
+    );
+    return { list, read };
+  },
+};
+
+export const Trades = {
+  list: modelEndpoints<Trade>("/api/v1/trades/").list,
+  create: modelEndpoints<Trade>("/api/v1/trades/").create,
 };

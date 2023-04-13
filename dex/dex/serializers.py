@@ -1,8 +1,16 @@
 from rest_framework import serializers
 from django.contrib.gis.geos import Point
 
-from .models import BuyOrder, Prosumer, SellOrder, Trade
+from .models import (
+    BuyOrder,
+    Prosumer,
+    SellOrder,
+    Trade,
+    OrderStatusChoices,
+    TradeCashflowStatusChoices,
+)
 from utils import BASE_READ_ONLY_FIELDS
+from utils.serializers import ChoiceField
 
 
 class PointFieldSerializer(serializers.Field):
@@ -34,35 +42,45 @@ class ProsumerSerializer(serializers.ModelSerializer):
         read_only_fields = BASE_READ_ONLY_FIELDS + ("billing_account",)
 
 
-class OrderSerialzierBase:
+class OrderSerialzier(serializers.ModelSerializer):
+    status = ChoiceField(
+        choices=OrderStatusChoices.choices,
+        read_only=True,
+    )
+
     FIELDS = ("prosumer", "energy", "status") + BASE_READ_ONLY_FIELDS
     READ_ONLY_FIELDS = ("prosumer", "status") + BASE_READ_ONLY_FIELDS
 
 
-class BuyOrderSerializer(serializers.ModelSerializer):
+class BuyOrderSerializer(OrderSerialzier):
     class Meta:
         model = BuyOrder
-        fields = OrderSerialzierBase.FIELDS + ("category",)
-        read_only_fields = OrderSerialzierBase.READ_ONLY_FIELDS
+        fields = OrderSerialzier.FIELDS + ("category",)
+        read_only_fields = OrderSerialzier.READ_ONLY_FIELDS
 
 
-class SellOrderSerializer(serializers.ModelSerializer):
+class SellOrderSerializer(OrderSerialzier):
     class Meta:
         model = SellOrder
-        fields = OrderSerialzierBase.FIELDS + ("category", "price")
-        read_only_fields = OrderSerialzierBase.READ_ONLY_FIELDS
+        fields = OrderSerialzier.FIELDS + ("category", "price")
+        read_only_fields = OrderSerialzier.READ_ONLY_FIELDS
 
 
 class TradeSerializer(serializers.ModelSerializer):
+    cashflow_status = ChoiceField(
+        choices=TradeCashflowStatusChoices.choices,
+        read_only=True,
+    )
+
     class Meta:
         model = Trade
         fields = BASE_READ_ONLY_FIELDS + (
             "buy",
             "sell",
             "price",
+            "trade_distance",
             "transmission_losses",
             "total_energy",
             "cashflow_status",
-            "trade_distance",
         )
         read_only_fields = fields

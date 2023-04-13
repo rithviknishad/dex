@@ -124,7 +124,7 @@ export const handleFireRequestError = (
   };
 };
 
-export const modelEndpoints = <T extends Record<string, unknown>>(
+export const modelEndpoints = <T extends object>(
   baseUrl: string,
   commonOptions: FireRequestOptions = {}
 ) => {

@@ -12,11 +12,7 @@ const routes = {
 };
 
 export default function AppRouter() {
-  const route = useRoutes(routes);
-
-  if (!route) {
-    return <PageNotFound />;
-  }
+  const route = useRoutes(routes) || <PageNotFound />;
 
   return <Page>{route}</Page>;
 }

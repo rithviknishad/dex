@@ -3,6 +3,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.exceptions import MethodNotAllowed
 from rest_framework import mixins
 from rest_framework.viewsets import GenericViewSet
+from django.db.models import Q
 
 from . import permissions
 from .models import BuyOrder, Prosumer, SellOrder, Trade
@@ -16,7 +17,7 @@ from .serializers import (
 
 class ProsumerViewSet(viewsets.ModelViewSet):
     lookup_field = "id"
-    queryset = Prosumer.objects.all()
+    queryset = Prosumer.objects.filter(deleted=False)
     serializer_class = ProsumerSerializer
     permission_classes = (
         IsAuthenticated,
@@ -27,6 +28,8 @@ class ProsumerViewSet(viewsets.ModelViewSet):
         serializer.save(billing_account=self.request.user)
 
     def get_queryset(self):
+        if self.request.user.is_superuser:
+            return super().get_queryset()
         return self.queryset.filter(billing_account=self.request.user)
 
 
@@ -94,3 +97,19 @@ class TradeViewSet(
         IsAuthenticated,
         permissions.Trade,
     )
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        if self.request.user.is_superuser:
+            return queryset
+
+        prosumer_id = self.kwargs.get("prosumer_id")
+        if prosumer_id:
+            return queryset.filter(
+                Q(buy__prosumer__id=prosumer_id) | Q(sell__prosumer__id=prosumer_id)
+            )
+
+        return queryset.filter(
+            Q(buy__prosumer__billing_account=self.request.user)
+            | Q(sell__prosumer__billing_account=self.request.user)
+        )
