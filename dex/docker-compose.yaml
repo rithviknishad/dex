@@ -5,12 +5,13 @@ networks:
     name: dex
 
 volumes:
-  postgres-data:
+  db:
 
 services:
   api:
     depends_on:
-      - db
+      db:
+        condition: service_healthy
     build:
       context: .
       dockerfile: docker/DevDockerfile
@@ -23,12 +24,17 @@ services:
       - .:/app
 
   db:
-    image: postgres:latest
+    image: postgis/postgis:latest
     restart: always
     env_file:
       - ./docker/.local.env
     volumes:
-      - postgres-data:/var/lib/postgresql/data
+      - db:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
   redis:
     image: redis:alpine

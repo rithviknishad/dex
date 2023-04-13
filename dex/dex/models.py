@@ -1,15 +1,7 @@
 from django.db import models
-from django.contrib.postgres.operations import CreateExtension
-from django.db import migrations
 from django.contrib.gis.db.models import PointField
 from utils.models import BaseModel, UUIDModel
 from sparks.models import SparksField
-
-
-class Migration(migrations.Migration):
-    operations = [
-        CreateExtension("postgis"),
-    ]
 
 
 class EnergyField(models.BigIntegerField):
@@ -48,6 +40,7 @@ class Prosumer(BaseModel, UUIDModel):
         help_text="A short brief about the prosumer",
     )
     location = PointField(
+        geography=True,
         blank=False,
         null=False,
         verbose_name="Location",
@@ -206,3 +199,7 @@ class Trade(BaseModel, UUIDModel):
         verbose_name="Payment Status",
         help_text="Status of the payment for this trade",
     )
+
+    @property
+    def trade_distance(self):
+        return self.buy.prosumer.location.distance(self.sell.prosumer.location)
