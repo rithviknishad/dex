@@ -48,25 +48,14 @@ export default function SignUp() {
             Accelerate renewable energy adoption
           </h2>
           <p className="mt-2 text-sm text-gray-600">
-            Exchange energy{" "}
-            <a
-              href="#"
-              className="font-medium text-indigo-600 hover:text-indigo-500"
-            >
-              at the edge
-            </a>
+            Exchange energy <a href="#">at the edge</a>
           </p>
         </div>
 
         <div className="mt-8">
-          <form className="space-y-6" onSubmit={handleSubmit}>
+          <form onSubmit={handleSubmit}>
             <div>
-              <label
-                htmlFor="email"
-                className="block text-sm font-medium leading-6 text-gray-900"
-              >
-                Email address
-              </label>
+              <label htmlFor="email">Email address</label>
               <div className="mt-2">
                 <input
                   id="email"
@@ -74,18 +63,12 @@ export default function SignUp() {
                   type="email"
                   autoComplete="email"
                   required
-                  className="block w-full rounded-md border-0 py-1.5 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                 />
               </div>
             </div>
 
             <div className="space-y-1">
-              <label
-                htmlFor="password"
-                className="block text-sm font-medium leading-6 text-gray-900"
-              >
-                Password
-              </label>
+              <label htmlFor="password">Password</label>
               <div className="mt-2">
                 <input
                   id="password"
@@ -93,30 +76,15 @@ export default function SignUp() {
                   type="password"
                   autoComplete="current-password"
                   required
-                  className="block w-full rounded-md border-0 py-1.5 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                 />
               </div>
             </div>
 
             <div className="flex items-center justify-between">
               <div className="flex items-center">
-                <input
-                  id="remember-me"
-                  name="remember-me"
-                  type="checkbox"
-                  className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600"
-                />
-                <label
-                  htmlFor="remember-me"
-                  className="ml-2 block text-sm text-gray-900"
-                >
-                  I agree to the{" "}
-                  <a
-                    href="/swagger"
-                    className="font-medium text-indigo-600 hover:text-indigo-500"
-                  >
-                    terms of service
-                  </a>
+                <input id="remember-me" name="remember-me" type="checkbox" />
+                <label htmlFor="remember-me" className="ml-2">
+                  I agree to the <a href="/swagger">terms of service</a>
                 </label>
               </div>
             </div>

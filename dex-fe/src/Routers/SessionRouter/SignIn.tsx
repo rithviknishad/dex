@@ -43,25 +43,14 @@ export default function SignIn() {
             Sign in to your account
           </h2>
           <p className="mt-2 text-sm text-gray-600">
-            using your registered{" "}
-            <a
-              href="#"
-              className="font-medium text-indigo-600 hover:text-indigo-500"
-            >
-              billing account
-            </a>
+            using your registered <a href="#">billing account</a>
           </p>
         </div>
 
         <div className="mt-8">
-          <form className="space-y-6" onSubmit={handleSubmit}>
+          <form onSubmit={handleSubmit}>
             <div>
-              <label
-                htmlFor="email"
-                className="block text-sm font-medium leading-6 text-gray-900"
-              >
-                Email address
-              </label>
+              <label htmlFor="email">Email address</label>
               <div className="mt-2">
                 <input
                   id="email"
@@ -69,18 +58,12 @@ export default function SignIn() {
                   type="email"
                   autoComplete="email"
                   required
-                  className="block w-full rounded-md border-0 py-1.5 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                 />
               </div>
             </div>
 
             <div className="space-y-1">
-              <label
-                htmlFor="password"
-                className="block text-sm font-medium leading-6 text-gray-900"
-              >
-                Password
-              </label>
+              <label htmlFor="password">Password</label>
               <div className="mt-2">
                 <input
                   id="password"
@@ -88,34 +71,20 @@ export default function SignIn() {
                   type="password"
                   autoComplete="current-password"
                   required
-                  className="block w-full rounded-md border-0 py-1.5 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                 />
               </div>
             </div>
 
             <div className="flex items-center justify-between">
               <div className="flex items-center">
-                <input
-                  id="remember-me"
-                  name="remember-me"
-                  type="checkbox"
-                  className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600"
-                />
-                <label
-                  htmlFor="remember-me"
-                  className="ml-2 block text-sm text-gray-900"
-                >
+                <input id="remember-me" name="remember-me" type="checkbox" />
+                <label htmlFor="remember-me" className="ml-2">
                   Remember me
                 </label>
               </div>
 
               <div className="text-sm">
-                <Link
-                  href="/auth/onboard"
-                  className="font-medium text-indigo-600 hover:text-indigo-500"
-                >
-                  New to DEX? Sign up
-                </Link>
+                <Link href="/auth/onboard">New to DEX? Sign up</Link>
               </div>
             </div>
 
