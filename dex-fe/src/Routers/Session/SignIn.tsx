@@ -4,7 +4,7 @@ import formData from "../../utils/formData";
 import { Auth } from "../../API";
 import { toast } from "react-hot-toast";
 import { login } from "../../hooks/useJWTAuth";
-import APIErrors from "../../Components/Misc/APIErrors";
+import APIErrors from "../../Components/Common/APIErrors";
 
 interface Form {
   email: string;

@@ -1,5 +1,5 @@
-import AppRouter from "./Routers/AppRouter";
-import SessionRouter from "./Routers/SessionRouter";
+import AppRouter from "./Routers/App";
+import SessionRouter from "./Routers/Session";
 import useJWTAuth from "./hooks/useJWTAuth";
 
 function App() {

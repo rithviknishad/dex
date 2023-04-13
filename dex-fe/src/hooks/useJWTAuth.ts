@@ -18,17 +18,7 @@ export default function useJWTAuth() {
       if (e.key !== AUTH_ACCESS_TOKEN_KEY) return;
 
       if (e.newValue) {
-        Auth.profile
-          .read()
-          .then((res) => {
-            if (res.status === 200) setAccount(res.data);
-          })
-          .catch(
-            handleFireRequestError((error) => {
-              if (error.response?.status === 401) signout();
-              console.error(error.response);
-            })
-          );
+        onFetchProfile(setAccount);
       } else {
         window.localStorage.removeItem(AUTH_REFRESH_TOKEN_KEY);
         setAccount(null);
@@ -40,8 +30,12 @@ export default function useJWTAuth() {
 
   useEffect(() => {
     if (authenticated) {
+      refreshToken();
+      onFetchProfile(setAccount);
+
       const interval = setInterval(() => {
         refreshToken();
+        onFetchProfile(setAccount);
       }, TOKEN_REFRESH_INTERVAL);
 
       return () => clearInterval(interval);
@@ -85,4 +79,20 @@ export const tokens = () => {
     access: localStorage.getItem(AUTH_ACCESS_TOKEN_KEY),
     refresh: localStorage.getItem(AUTH_REFRESH_TOKEN_KEY),
   };
+};
+
+const onFetchProfile = async (
+  setAccount: (account: BillingAccount | null) => void
+) => {
+  Auth.profile
+    .read()
+    .then((res) => {
+      if (res.status === 200) setAccount(res.data);
+    })
+    .catch(
+      handleFireRequestError((error) => {
+        if (error.response?.status === 401) signout();
+        console.error(error.response);
+      })
+    );
 };

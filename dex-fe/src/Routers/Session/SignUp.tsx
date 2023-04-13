@@ -4,7 +4,7 @@ import AuthLayout from "../../Components/Auth/AuthLayout";
 import { toast } from "react-hot-toast";
 import { login } from "../../hooks/useJWTAuth";
 import formData from "../../utils/formData";
-import APIErrors from "../../Components/Misc/APIErrors";
+import APIErrors from "../../Components/Common/APIErrors";
 
 interface Form {
   email: string;
