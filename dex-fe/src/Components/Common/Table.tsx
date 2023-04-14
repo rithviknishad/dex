@@ -8,8 +8,9 @@ interface Props<T extends object> {
   description?: string;
   theads: Record<keyof T, string | number>;
   content: T[];
-  render: Partial<Record<keyof T, React.ReactNode>>;
-  actions?: TableRowActionProps<T>[];
+  render?: Partial<Record<keyof T, (item: T) => React.ReactNode>>;
+  tableActions?: React.ReactNode[];
+  rowActions?: TableRowActionProps<T>[];
   primaryKey: keyof T;
 }
 
@@ -23,8 +24,8 @@ const Table = <T extends object>(props: Props<T>) => {
           </h1>
           <p className="mt-2 text-sm text-gray-700">{props.description}</p>
         </div>
-        <div className="mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
-          <button type="button">Add user</button>
+        <div className="flex gap-2 items-center mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
+          {(props.tableActions ?? []).map((action) => action)}
         </div>
       </div>
       <div className="mt-8 flow-root">
@@ -42,7 +43,7 @@ const Table = <T extends object>(props: Props<T>) => {
                       {value as any}
                     </th>
                   ))}
-                  {(props.actions ?? []).map((action) => (
+                  {(props.rowActions ?? []).map((action) => (
                     <th
                       scope="col"
                       className="relative py-3.5 pl-3 pr-4 sm:pr-0"
@@ -55,15 +56,19 @@ const Table = <T extends object>(props: Props<T>) => {
               <tbody className="divide-y divide-gray-200">
                 {props.content.map((row, index) => (
                   <tr key={index}>
-                    {Object.entries(props.theads).map(([key, value]) => (
-                      <td
-                        key={key}
-                        className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-0"
-                      >
-                        {(props.render as any)[key] ?? (row as any)[key]}
-                      </td>
-                    ))}
-                    {(props.actions ?? []).map((action) => (
+                    {Object.entries(props.theads).map(([key, value]) => {
+                      const item = (row as any)[key];
+
+                      return (
+                        <td
+                          key={key}
+                          className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-0"
+                        >
+                          {(props.render as any)?.[key]?.(item) ?? item}
+                        </td>
+                      );
+                    })}
+                    {(props.rowActions ?? []).map((action) => (
                       <td className="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-0">
                         <a
                           href="#"

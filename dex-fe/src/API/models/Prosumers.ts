@@ -16,7 +16,10 @@ export interface Prosumer {
   billing_account: ModelPK;
   name: string;
   description: string;
-  location: string;
+  location: {
+    latitude: number;
+    longitude: number;
+  };
 }
 
 export interface BuyOrder extends OrderBase {
