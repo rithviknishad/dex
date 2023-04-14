@@ -29,7 +29,7 @@ export default function Breadcrumbs() {
                 aria-hidden="true"
               />
               <Link
-                href={page.href}
+                href={"/" + page.href}
                 className={classNames(
                   "ml-4 text-sm hover:text-white",
                   page.current ? "font-medium text-gray-300" : "text-gray-400"

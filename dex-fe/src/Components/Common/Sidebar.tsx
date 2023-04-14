@@ -25,7 +25,7 @@ export default function Sidebar() {
           </li>
           <li className="-mx-6 mt-auto mb-8">
             <Link
-              href="/auth/signout"
+              href="/signout"
               className="flex items-center gap-x-4 px-6 py-3 text-sm font-semibold leading-6 text-white hover:bg-gray-800 transition-colors duration-150"
             >
               <img

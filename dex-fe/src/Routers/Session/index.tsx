@@ -4,9 +4,8 @@ import SignIn from "./SignIn";
 import SignUp from "./SignUp";
 
 const routes = {
-  "/": () => <Redirect to="/auth" />,
-  "/auth": () => <SignIn />,
-  "/auth/onboard": () => <SignUp />,
+  "/": () => <SignIn />,
+  "/onboard": () => <SignUp />,
   //   "/session-expired": () => <SessionExpired />,
 };
 

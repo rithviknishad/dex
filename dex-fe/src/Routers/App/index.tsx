@@ -8,7 +8,7 @@ import Breadcrumbs from "../../Components/Common/Breadcrumbs";
 const routes = {
   "/": () => <Redirect to="/prosumers" />,
   "/prosumers": () => <ProsumersList />,
-  "/auth/signout": () => <SignOut />,
+  "/signout": () => <SignOut />,
 };
 
 export default function AppRouter() {

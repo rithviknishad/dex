@@ -79,7 +79,7 @@ export default function SignIn() {
                 </label>
               </div>
               <div className="text-sm">
-                <Link href="/auth/onboard">New to DEX? Sign up</Link>
+                <Link href="/onboard">New to DEX? Sign up</Link>
               </div>
             </div>
 
