@@ -21,9 +21,11 @@ const Page = ({ children }: { children: React.ReactNode }) => {
   return (
     <div className="flex h-full bg-gray-100">
       <Sidebar />
-      <div className="h-full w-full">
-        <Breadcrumbs />
-        <DevelopmentModeNotice />
+      <div className="relative h-full w-full overflow-y-auto">
+        <div className="sticky top-0 left-0 right-0">
+          <Breadcrumbs />
+          <DevelopmentModeNotice />
+        </div>
         {children}
       </div>
     </div>

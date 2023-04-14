@@ -1,24 +1,12 @@
 import { useState } from "react";
-import { Model } from "../../API/models";
-import { Prosumer } from "../../API/models/Prosumers";
 import Modal from "../../Components/Common/Modal";
-import Table from "../../Components/Common/Table";
 import formData from "../../utils/formData";
 import { toast } from "react-hot-toast";
 import { Prosumers } from "../../API";
 import APIErrors from "../../Components/Common/APIErrors";
-
-const prosumer: Model<Prosumer> = {
-  id: 1,
-  billing_account: 1,
-  name: "Prosumer 1",
-  description: "Prosumer 1",
-  location: { latitude: 0, longitude: 0 },
-  updated_on: new Date().toISOString(),
-  created_on: new Date().toISOString(),
-};
-
-const prosumers = Array.from({ length: 10 }, (_, i) => prosumer);
+import PaginatedApiTable from "../../Components/Common/PaginatedApiTable";
+import { classNames } from "../../utils/classNames";
+import { navigate } from "raviger";
 
 interface CreateProsumerForm {
   name: string;
@@ -29,6 +17,8 @@ interface CreateProsumerForm {
 
 export default function ProsumersList() {
   const [showCreate, setShowCreate] = useState(false);
+  const [isRefreshing, setIsRefreshing] = useState(false);
+  const [refreshKey, setRefreshKey] = useState(0);
 
   const handleRegisterProsumer = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -45,6 +35,7 @@ export default function ProsumersList() {
       }).then((res) => {
         if (res.status === 201) {
           setShowCreate(false);
+          setRefreshKey((key) => key + 1);
         }
         return res;
       }),
@@ -130,34 +121,56 @@ export default function ProsumersList() {
         </form>
       </Modal>
       <div className="px-4 py-8 bg-white rounded-lg">
-        <Table
+        <PaginatedApiTable
+          key={refreshKey}
+          onQuery={(limit, offset) => {
+            setIsRefreshing(true);
+            return Prosumers.list({ query: { limit, offset } }).then((res) => {
+              setIsRefreshing(false);
+              return res;
+            });
+          }}
           title="Prosumers"
           description="List of all prosumers managed by your billing account."
-          theads={{
-            id: "ID",
-            name: "Name",
-            description: "Description",
-            billing_account: "Billing Account",
-            location: "Location",
-            updated_on: "Updated On",
-            created_on: "Created On",
-          }}
-          content={prosumers}
-          primaryKey="name"
-          render={{
-            location: (location: any) => (
-              <span>
-                {location.latitude}, {location.longitude}
-              </span>
-            ),
-          }}
+          theads={
+            {
+              id: "ID",
+              name: "Name",
+              description: "Description",
+              location: "Location",
+              updated_on: "Modified",
+            } as any
+          }
+          render={
+            {
+              location: (location: any) => (
+                <span>
+                  {location.latitude}, {location.longitude}
+                </span>
+              ),
+            } as any
+          }
           tableActions={[
             <button type="button" onClick={() => setShowCreate(true)}>
               <i className="fa-solid fa-plus" />
               Register
             </button>,
-            <button type="button">Refresh</button>,
+            <button
+              disabled={isRefreshing}
+              type="button"
+              onClick={() => setRefreshKey((key) => key + 1)}
+              className={isRefreshing ? "animate-pulse" : ""}
+            >
+              <i
+                className={classNames(
+                  "fa-solid fa-rotate",
+                  isRefreshing && "animate-spin"
+                )}
+              />
+              Refresh
+            </button>,
           ]}
+          onClickRow={(prosumer) => navigate("/prosumers/" + prosumer.id)}
         />
       </div>
     </div>

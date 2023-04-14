@@ -1,13 +1,13 @@
 export * as JWTAuth from "./JWTAuth";
 
-export declare type Paginated<T> = {
+export type Paginated<T> = {
   count: number;
   previous: string;
   next: string;
   results: readonly T[];
 };
 
-export declare type Model<T> = T & {
+export type Model<T extends object> = T & {
   created_on: string;
   updated_on: string;
   id: ModelPK;
