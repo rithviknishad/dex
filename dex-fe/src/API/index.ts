@@ -18,9 +18,7 @@ export const Auth = {
   tokenRefreshCreate(refresh: string) {
     return fireRequest<JWTAuth.TokenRefresh>(
       "POST /api/v1/auth/token/refresh/",
-      {
-        refresh,
-      }
+      { refresh }
     );
   },
 

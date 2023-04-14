@@ -3,18 +3,18 @@ import { useEffect, useState } from "react";
 import Table, { GenericTableProps } from "./Table";
 import { Model } from "../../API/models";
 
-const PER_PAGE_LIMIT = 20;
-
 type ListApi<T extends object> = ReturnType<typeof modelEndpoints<T>>["list"];
 
 interface Props<T extends object> extends GenericTableProps<Model<T>> {
   onQuery: (limit: number, offset: number) => ReturnType<ListApi<T>>;
   autoRefreshInterval?: number;
+  perPageLimit?: number;
 }
 
 const PaginatedApiTable = <T extends object>({
   onQuery,
-  autoRefreshInterval = 20e3,
+  autoRefreshInterval = 60e3,
+  perPageLimit = 20,
   ...props
 }: Props<T>) => {
   const [page, setPage] = useState(1);
@@ -23,7 +23,7 @@ const PaginatedApiTable = <T extends object>({
 
   useEffect(() => {
     const fetchData = () =>
-      onQuery(PER_PAGE_LIMIT, (page - 1) * PER_PAGE_LIMIT).then((response) => {
+      onQuery(perPageLimit, (page - 1) * perPageLimit).then((response) => {
         const { count, results } = response.data;
         setTotal(count);
         setData(results);
@@ -40,8 +40,8 @@ const PaginatedApiTable = <T extends object>({
       {...props}
       content={data || []}
       pagination={{
-        start: (page - 1) * PER_PAGE_LIMIT + 1,
-        end: page * PER_PAGE_LIMIT,
+        start: (page - 1) * perPageLimit + 1,
+        end: page * perPageLimit,
         total,
         onPrevious: () => setPage(page - 1),
         onNext: () => setPage(page + 1),

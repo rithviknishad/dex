@@ -99,6 +99,16 @@ const Table = <T extends object>(props: Props<T>) => {
                     ))}
                   </tr>
                 ))}
+                {props.content.length === 0 && (
+                  <tr>
+                    <td
+                      colSpan={Object.keys(props.theads).length}
+                      className="py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-0"
+                    >
+                      No data found
+                    </td>
+                  </tr>
+                )}
               </tbody>
             </table>
           </div>
