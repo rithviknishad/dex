@@ -7,7 +7,7 @@ export interface SidebarItem {
   countAtom: Atom<string | number>;
 }
 
-export const sidebarItems: Record<string, SidebarItem> = {
+export const sidebarItems = {
   prosumers: {
     name: "Prosumers",
     href: "/prosumers",

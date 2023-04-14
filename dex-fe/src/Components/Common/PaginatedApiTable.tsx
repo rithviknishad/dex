@@ -12,7 +12,7 @@ interface Props<T extends object> extends GenericTableProps<Model<T>> {
   autoRefreshInterval?: number;
 }
 
-const PaginatedApiTable = <T extends Model<object>>({
+const PaginatedApiTable = <T extends object>({
   onQuery,
   autoRefreshInterval = 20e3,
   ...props

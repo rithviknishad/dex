@@ -7,6 +7,11 @@ import APIErrors from "../../Components/Common/APIErrors";
 import PaginatedApiTable from "../../Components/Common/PaginatedApiTable";
 import { classNames } from "../../utils/classNames";
 import { navigate } from "raviger";
+import { useAtom } from "jotai";
+import { sidebarItems } from "../../Components/Common/SidebarItems";
+import { Prosumer } from "../../API/models/Prosumers";
+
+const Table = PaginatedApiTable<Prosumer>;
 
 interface CreateProsumerForm {
   name: string;
@@ -19,6 +24,7 @@ export default function ProsumersList() {
   const [showCreate, setShowCreate] = useState(false);
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [refreshKey, setRefreshKey] = useState(0);
+  const [count, setCount] = useAtom(sidebarItems.prosumers.countAtom);
 
   const handleRegisterProsumer = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -121,35 +127,34 @@ export default function ProsumersList() {
         </form>
       </Modal>
       <div className="px-4 py-8 bg-white rounded-lg">
-        <PaginatedApiTable
+        <Table
           key={refreshKey}
           onQuery={(limit, offset) => {
             setIsRefreshing(true);
             return Prosumers.list({ query: { limit, offset } }).then((res) => {
               setIsRefreshing(false);
+              if (res.status === 200) {
+                setCount(res.data.count.toString());
+              }
               return res;
             });
           }}
           title="Prosumers"
           description="List of all prosumers managed by your billing account."
-          theads={
-            {
-              id: "ID",
-              name: "Name",
-              description: "Description",
-              location: "Location",
-              updated_on: "Modified",
-            } as any
-          }
-          render={
-            {
-              location: (location: any) => (
-                <span>
-                  {location.latitude}, {location.longitude}
-                </span>
-              ),
-            } as any
-          }
+          theads={{
+            id: "ID",
+            name: "Name",
+            description: "Description",
+            location: "Location",
+            updated_on: "Modified",
+          }}
+          render={{
+            location: ({ location: loc }) => (
+              <>
+                {loc.latitude}, {loc.longitude}
+              </>
+            ),
+          }}
           tableActions={[
             <button type="button" onClick={() => setShowCreate(true)}>
               <i className="fa-solid fa-plus" />

@@ -16,7 +16,7 @@ interface PaginationProps {
 export interface GenericTableProps<T extends object> {
   title: string;
   description?: string;
-  theads: Record<keyof T, string>;
+  theads: Partial<Record<keyof T, string>>;
   render?: Partial<Record<keyof T, (item: T) => React.ReactNode>>;
   tableActions?: React.ReactNode[];
   rowActions?: TableRowActionProps<T>[];
@@ -77,18 +77,15 @@ const Table = <T extends object>(props: Props<T>) => {
                       props.onClickRow && "cursor-pointer"
                     )}
                   >
-                    {Object.entries(props.theads).map(([key, value]) => {
-                      const item = (row as any)[key];
-
-                      return (
-                        <td
-                          key={key}
-                          className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-0"
-                        >
-                          {(props.render as any)?.[key]?.(item) ?? item}
-                        </td>
-                      );
-                    })}
+                    {Object.entries(props.theads).map(([key, value]) => (
+                      <td
+                        key={key}
+                        className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-0"
+                      >
+                        {(props.render as any)?.[key]?.(row) ??
+                          (row as any)[key]}
+                      </td>
+                    ))}
                     {(props.rowActions ?? []).map((action) => (
                       <td className="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-0">
                         <a
