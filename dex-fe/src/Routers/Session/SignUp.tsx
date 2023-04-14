@@ -56,28 +56,24 @@ export default function SignUp() {
           <form onSubmit={handleSubmit}>
             <div>
               <label htmlFor="email">Email address</label>
-              <div className="mt-2">
-                <input
-                  id="email"
-                  name="email"
-                  type="email"
-                  autoComplete="email"
-                  required
-                />
-              </div>
+              <input
+                id="email"
+                name="email"
+                type="email"
+                autoComplete="email"
+                required
+              />
             </div>
 
-            <div className="space-y-1">
+            <div>
               <label htmlFor="password">Password</label>
-              <div className="mt-2">
-                <input
-                  id="password"
-                  name="password"
-                  type="password"
-                  autoComplete="current-password"
-                  required
-                />
-              </div>
+              <input
+                id="password"
+                name="password"
+                type="password"
+                autoComplete="current-password"
+                required
+              />
             </div>
 
             <div className="flex items-center justify-between">

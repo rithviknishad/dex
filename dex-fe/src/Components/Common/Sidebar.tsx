@@ -1,7 +1,7 @@
 import { Link } from "raviger";
 import { authProfileAtom } from "../../hooks/useJWTAuth";
 import { classNames } from "../../utils/classNames";
-import { atom, useAtom } from "jotai";
+import { useAtom } from "jotai";
 import { SidebarItem, sidebarItems } from "./SidebarItems";
 
 export default function Sidebar() {
@@ -23,10 +23,10 @@ export default function Sidebar() {
               ))}
             </ul>
           </li>
-          <li className="-mx-6 mt-auto">
+          <li className="-mx-6 mt-auto mb-8">
             <Link
-              href="#"
-              className="flex items-center gap-x-4 px-6 py-3 text-sm font-semibold leading-6 text-white hover:bg-gray-800"
+              href="/auth/signout"
+              className="flex items-center gap-x-4 px-6 py-3 text-sm font-semibold leading-6 text-white hover:bg-gray-800 transition-colors duration-150"
             >
               <img
                 className="h-8 w-8 rounded-full bg-gray-800"
@@ -57,7 +57,7 @@ const Item = ({ item }: { item: SidebarItem }) => {
           current
             ? "bg-gray-800 text-white"
             : "text-gray-400 hover:text-white hover:bg-gray-800",
-          "group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold items-center"
+          "group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold items-center transition-all duration-150"
         )}
       >
         <i className={classNames("mx-2", item.icon)} aria-hidden="true" />
