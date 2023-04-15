@@ -99,8 +99,8 @@ class Order(BaseModel, UUIDModel):
         help_text="Net export energy in Wh.",
     )
     price = SparksField(
-        blank=False,
-        null=False,
+        blank=True,
+        null=True,
         verbose_name="Price (SPARKS)",
         help_text="Price of the energy in SPARKS",
     )
@@ -132,9 +132,8 @@ class Trade(BaseModel, UUIDModel):
     A trade associated to an order
     """
 
-    order = models.ForeignKey(
+    order = models.OneToOneField(
         Order,
-        related_name="trades",
         null=False,
         editable=False,
         on_delete=models.PROTECT,
@@ -154,13 +153,6 @@ class Trade(BaseModel, UUIDModel):
         editable=False,
         verbose_name="Transmission Losses",
         help_text="Estimated energy lost in transmission",
-    )
-    energy = EnergyField(
-        blank=False,
-        null=False,
-        editable=False,
-        verbose_name="Total Energy",
-        help_text="Total amount of energy traded in this trade (inclusive of transmission losses).",
     )
     settlement_status = models.SmallIntegerField(
         blank=False,

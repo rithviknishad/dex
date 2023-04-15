@@ -45,7 +45,7 @@ class ProsumerSerializer(serializers.ModelSerializer):
 class OrderSerialzier(serializers.ModelSerializer):
     prosumer = ProsumerSerializer(read_only=True)
     status = ChoiceField(choices=OrderStatus.choices, read_only=True)
-    category = ChoiceField(choices=OrderCategory.choices, read_only=True)
+    category = ChoiceField(choices=OrderCategory.choices)
 
     class Meta:
         model = Order
@@ -72,16 +72,15 @@ class TradeSerializer(serializers.ModelSerializer):
             "order",
             "price",
             "transmission_losses",
-            "energy",
             "settlement_status",
         )
         read_only_fields = fields
 
 
-class ExchangeWebhookSerializer(serializers.Serializer):
-    trades = TradeSerializer(many=True)
-    efficiency = serializers.FloatField()
+# class ExchangeWebhookSerializer(serializers.Serializer):
+#     trades = TradeSerializer(many=True)
+#     efficiency = serializers.FloatField()
 
-    class Meta:
-        fields = ("trades", "efficiency")
-        read_only_fields = fields
+#     class Meta:
+#         fields = ("trades", "efficiency")
+#         read_only_fields = fields

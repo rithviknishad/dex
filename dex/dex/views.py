@@ -1,5 +1,5 @@
-from django.db.models import Sum
-from django.db.models import Q
+from django.db.models import Q, Sum, F, FloatField, Case, When
+from django.db.models.functions import Abs
 from rest_framework import viewsets
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.exceptions import MethodNotAllowed
@@ -7,15 +7,16 @@ from rest_framework import mixins
 from rest_framework.viewsets import GenericViewSet
 from rest_framework.decorators import action
 from rest_framework.response import Response
+from rest_framework.exceptions import ValidationError
+from rest_framework import status
 
 
 from . import permissions
-from .models import Prosumer, Order, Trade
+from .models import Prosumer, Order, OrderStatus, Trade
 from .serializers import (
     ProsumerSerializer,
     OrderSerialzier,
     TradeSerializer,
-    ExchangeWebhookSerializer,
 )
 
 
@@ -70,6 +71,11 @@ class OrderViewSet(
                 "POST",
                 "To create an order, use the API that specifies the prosumer ID in the URL.",
             )
+
+        if serializer.validated_data["energy"] > 0:
+            if not serializer.validated_data.get("price"):
+                raise ValidationError("Price is required for positive energy orders")
+
         prosumer = Prosumer.objects.get(id=prosumer_id)
         serializer.save(prosumer=prosumer)
 
@@ -107,7 +113,7 @@ class TradeViewSet(
         detail=False,
         methods=["post"],
         url_path="webhooks/exchange",
-        serializer_class=ExchangeWebhookSerializer,
+        serializer_class=TradeSerializer,
     )
     def exchange_webhook(self, request, *args, **kwargs):
         if not self.request.headers.get("X-Exchange-Signature"):
@@ -119,24 +125,88 @@ class TradeViewSet(
                 status=400,
             )
 
-        open_buy_orders = BuyOrder.objects.filter(status__lte=OrderStatus.OPEN)
-        open_sell_orders = SellOrder.objects.filter(status__lte=OrderStatus.OPEN)
+        # Craft QuerySet of all open orders
+        open_orders = Order.objects.filter(status__lte=OrderStatus.OPEN)
 
-        generation_sum = open_buy_orders.aggregate(Sum("energy"))["energy__sum"]
-        consumption_sum = open_sell_orders.aggregate(Sum("energy"))["energy__sum"]
+        # Segregate sell and buy orders based on energy sign
+        sell_orders = open_orders.filter(energy__gt=0)
+        buy_orders = open_orders.filter(energy__lt=0)
 
-        transmission_losses = generation_sum - consumption_sum
-        if transmission_losses < 0:
+        # Aggregate total generation and demand
+        total_generation = sell_orders.aggregate(Sum("energy"))["energy__sum"]
+        total_demand = -buy_orders.aggregate(Sum("energy"))["energy__sum"]
+        # Aggregate total generation and demand
+        # generation_demand = (
+        #     Order.objects.filter(status__lte=OrderStatus.OPEN)
+        #     .annotate(abs_energy=Abs("energy"))
+        #     .annotate(
+        #         total_generation=Sum(
+        #             Case(
+        #                 When(energy__gt=0, then=F("energy")), output_field=FloatField()
+        #             )
+        #         )
+        #     )
+        #     .annotate(
+        #         total_demand=Sum(
+        #             Case(
+        #                 When(energy__lt=0, then=F("energy")), output_field=FloatField()
+        #             )
+        #         )
+        #     )
+        #     .values("total_generation", "total_demand")
+        #     .first()
+        # )
+        # total_generation = generation_demand["total_generation"]
+        # total_demand = generation_demand["total_demand"]
+        efficiency = total_demand / total_generation
+
+        # Reject unrealistic efficiency
+        if efficiency > 1:
             return Response(
-                {"error": f"Transmission Losses={transmission_losses}"},
-                status=400,
+                {"error": f"Unrealistic efficiency: {efficiency}"}, status=400
             )
 
-        serializer = ExchangeWebhookSerializer(
-            data={
-                "trades": [],
-                "efficiency": consumption_sum / generation_sum,
-            }
+        # Update all open orders to PROCESSING status
+        open_orders.update(status=OrderStatus.PROCESSING)
+        processing_orders = Order.objects.filter(status=OrderStatus.PROCESSING)
+
+        weighted_sum = (
+            processing_orders.filter(energy__gt=0)
+            .annotate(weighted_price=F("energy") * F("price"))
+            .aggregate(
+                total_weight=Sum("energy", output_field=FloatField()),
+                total_weighted_price=Sum("weighted_price", output_field=FloatField()),
+            )
         )
-        serializer.is_valid(raise_exception=True)
-        return Response(serializer.validated_data)
+
+        market_price = (
+            weighted_sum["total_weighted_price"] / weighted_sum["total_weight"]
+        )
+
+        def get_sell_trade(order):
+            # Estimated Losses = E[sending] * (1 - efficiency)
+            losses = order.energy * (1 - efficiency)
+            return Trade(
+                order=order, price=order.price, transmission_losses=round(losses)
+            )
+
+        def get_buy_trade(order):
+            # Estimated Losses = E[receiving] * (1 / efficiency - 1)
+            losses = -order.energy * (1 / efficiency - 1)
+            price = market_price * (1 + losses / order.energy)
+            return Trade(
+                order=order, price=round(price), transmission_losses=round(losses)
+            )
+
+        trades = Trade.objects.bulk_create(
+            [
+                get_sell_trade(order) if order.energy > 0 else get_buy_trade(order)
+                for order in processing_orders
+            ]
+        )
+
+        processing_orders.update(status=OrderStatus.COMPLETED)
+
+        return Response(
+            TradeSerializer(trades, many=True).data, status=status.HTTP_201_CREATED
+        )
