@@ -1,17 +1,21 @@
+from django.db.models import Sum
+from django.db.models import Q
 from rest_framework import viewsets
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.exceptions import MethodNotAllowed
 from rest_framework import mixins
 from rest_framework.viewsets import GenericViewSet
-from django.db.models import Q
+from rest_framework.decorators import action
+from rest_framework.response import Response
+
 
 from . import permissions
-from .models import BuyOrder, Prosumer, SellOrder, Trade
+from .models import Prosumer, Order, Trade
 from .serializers import (
-    BuyOrderSerializer,
     ProsumerSerializer,
-    SellOrderSerializer,
+    OrderSerialzier,
     TradeSerializer,
+    ExchangeWebhookSerializer,
 )
 
 
@@ -33,13 +37,19 @@ class ProsumerViewSet(viewsets.ModelViewSet):
         return self.queryset.filter(billing_account=self.request.user)
 
 
-class OrderBaseViewSet(
+class OrderViewSet(
     mixins.CreateModelMixin,
     mixins.RetrieveModelMixin,
     mixins.ListModelMixin,
     GenericViewSet,
 ):
     lookup_field = "id"
+    queryset = Order.objects.filter(deleted=False)
+    serializer_class = OrderSerialzier
+    permission_classes = (
+        IsAuthenticated,
+        permissions.Order,
+    )
 
     def get_queryset(self):
         if self.request.user.is_superuser:
@@ -62,27 +72,6 @@ class OrderBaseViewSet(
             )
         prosumer = Prosumer.objects.get(id=prosumer_id)
         serializer.save(prosumer=prosumer)
-
-    class Meta:
-        abstract = True
-
-
-class BuyOrderViewSet(OrderBaseViewSet):
-    queryset = BuyOrder.objects.all()
-    serializer_class = BuyOrderSerializer
-    permission_classes = (
-        IsAuthenticated,
-        permissions.Order,
-    )
-
-
-class SellOrderViewSet(OrderBaseViewSet):
-    queryset = SellOrder.objects.all()
-    serializer_class = SellOrderSerializer
-    permission_classes = (
-        IsAuthenticated,
-        permissions.Order,
-    )
 
 
 class TradeViewSet(
@@ -113,3 +102,41 @@ class TradeViewSet(
             Q(buy__prosumer__billing_account=self.request.user)
             | Q(sell__prosumer__billing_account=self.request.user)
         )
+
+    @action(
+        detail=False,
+        methods=["post"],
+        url_path="webhooks/exchange",
+        serializer_class=ExchangeWebhookSerializer,
+    )
+    def exchange_webhook(self, request, *args, **kwargs):
+        if not self.request.headers.get("X-Exchange-Signature"):
+            return Response(
+                {
+                    "error": "Missing X-Exchange-Signature header",
+                    "reason": "This webhook is only for the exchange to call",
+                },
+                status=400,
+            )
+
+        open_buy_orders = BuyOrder.objects.filter(status__lte=OrderStatus.OPEN)
+        open_sell_orders = SellOrder.objects.filter(status__lte=OrderStatus.OPEN)
+
+        generation_sum = open_buy_orders.aggregate(Sum("energy"))["energy__sum"]
+        consumption_sum = open_sell_orders.aggregate(Sum("energy"))["energy__sum"]
+
+        transmission_losses = generation_sum - consumption_sum
+        if transmission_losses < 0:
+            return Response(
+                {"error": f"Transmission Losses={transmission_losses}"},
+                status=400,
+            )
+
+        serializer = ExchangeWebhookSerializer(
+            data={
+                "trades": [],
+                "efficiency": consumption_sum / generation_sum,
+            }
+        )
+        serializer.is_valid(raise_exception=True)
+        return Response(serializer.validated_data)

@@ -1,12 +1,6 @@
 from django.contrib import admin
 
-from .models import BuyOrder, Prosumer, SellOrder, Trade
-
-
-class BuyOrderAdmin(admin.ModelAdmin):
-    model = BuyOrder
-    # list_display = ["prosumer", "energy", "status", "category", "duration"]
-    # list_select_related = True
+from .models import Prosumer, Order, Trade
 
 
 class ProsumerAdmin(admin.ModelAdmin):
@@ -16,8 +10,8 @@ class ProsumerAdmin(admin.ModelAdmin):
     # list_select_related = True
 
 
-class SellOrderAdmin(admin.ModelAdmin):
-    model = SellOrder
+class OrderAdmin(admin.ModelAdmin):
+    model = Order
 
 
 class TradeAdmin(admin.ModelAdmin):
@@ -26,7 +20,6 @@ class TradeAdmin(admin.ModelAdmin):
     # list_select_related = True
 
 
-admin.site.register(BuyOrder, BuyOrderAdmin)
 admin.site.register(Prosumer, ProsumerAdmin)
-admin.site.register(SellOrder, SellOrderAdmin)
+admin.site.register(Order, OrderAdmin)
 admin.site.register(Trade, TradeAdmin)
