@@ -1,5 +1,3 @@
-import { useAtom } from "jotai";
-import { sidebarItems } from "../../Components/Common/SidebarItems";
 import { useState } from "react";
 import PaginatedApiTable from "../../Components/Common/PaginatedApiTable";
 import { Order, Prosumer } from "../../API/models/DEX";
@@ -16,7 +14,6 @@ interface RouteParams {
 export default function OrdersList({ prosumer }: RouteParams) {
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [refreshKey, setRefreshKey] = useState(0);
-  const [count, setCount] = useAtom(sidebarItems.orders.countAtom);
 
   return (
     <div className="p-4">
@@ -28,15 +25,16 @@ export default function OrdersList({ prosumer }: RouteParams) {
             return Orders.list({ query: { limit, offset, prosumer } }).then(
               (res) => {
                 setIsRefreshing(false);
-                if (res.status === 200) {
-                  setCount(res.data.count.toString());
-                }
                 return res;
               }
             );
           }}
           title="Orders"
-          description="List of all prosumers managed by your billing account."
+          description={
+            prosumer
+              ? "List of all orders issued by the prosumer."
+              : "List of all orders issued by all prosumers managed by your billing account."
+          }
           theads={{
             id: "ID",
             created_on: "Issued on",

@@ -7,8 +7,6 @@ import APIErrors from "../../Components/Common/APIErrors";
 import PaginatedApiTable from "../../Components/Common/PaginatedApiTable";
 import { classNames } from "../../utils/classNames";
 import { navigate } from "raviger";
-import { useAtom } from "jotai";
-import { sidebarItems } from "../../Components/Common/SidebarItems";
 import { Prosumer } from "../../API/models/DEX";
 
 const Table = PaginatedApiTable<Prosumer>;
@@ -24,7 +22,6 @@ export default function ProsumersList() {
   const [showCreate, setShowCreate] = useState(false);
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [refreshKey, setRefreshKey] = useState(0);
-  const [count, setCount] = useAtom(sidebarItems.prosumers.countAtom);
 
   const handleRegisterProsumer = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -133,9 +130,6 @@ export default function ProsumersList() {
             setIsRefreshing(true);
             return Prosumers.list({ query: { limit, offset } }).then((res) => {
               setIsRefreshing(false);
-              if (res.status === 200) {
-                setCount(res.data.count.toString());
-              }
               return res;
             });
           }}
