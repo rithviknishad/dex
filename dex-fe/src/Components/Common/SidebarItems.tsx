@@ -32,4 +32,10 @@ export const sidebarItems = {
     icon: "fa-solid fa-bolt",
     countAtom: atom(""),
   },
+  developer: {
+    name: "Developer Settings",
+    href: "/settings/developer",
+    icon: "fa-solid fa-code",
+    countAtom: atom(""),
+  },
 };

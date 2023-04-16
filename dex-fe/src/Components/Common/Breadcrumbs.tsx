@@ -17,7 +17,12 @@ export default function Breadcrumbs() {
       <ol role="list" className="flex items-center space-x-4">
         <li>
           <Link href="/" className="text-gray-600 hover:text-gray-500">
-            <i className="fa-solid fa-house" aria-hidden="true" />
+            <div className="relative mx-4">
+              <span className="flex absolute h-3 w-3 left-0 -mt-1.5 -mr-5 items-center justify-center">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-brand-400 opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-brand-500"></span>
+              </span>
+            </div>
             <span className="sr-only">Home</span>
           </Link>
         </li>

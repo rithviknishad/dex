@@ -9,6 +9,7 @@ import OrdersList from "./OrdersList";
 import OrderDetails from "./OrderDetails";
 import TradesList from "./TradesList";
 import TradeDetails from "./TradeDetails";
+import DeveloperSettings from "./DeveloperSettings";
 
 interface Routes {
   [key: string]: (path?: any) => JSX.Element;
@@ -26,6 +27,7 @@ const routes: Routes = {
   "/orders/:id": (path) => <OrderDetails {...path} />,
   "/trades": () => <TradesList />,
   "/trades/:id": (path) => <TradeDetails {...path} />,
+  "/settings/developer": () => <DeveloperSettings />,
   "/signout": () => <SignOut />,
 };
 

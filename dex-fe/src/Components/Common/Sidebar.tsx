@@ -11,7 +11,7 @@ export default function Sidebar() {
     <div className="flex grow flex-col gap-y-5 overflow-y-auto bg-gray-900 px-6 w-full max-w-xs">
       <div className="flex h-16 shrink-0 items-center">
         <span className="font-display text-2xl text-brand-500 font-bold">
-          Connect \ DEX
+          DEX <span className="text-gray-400 ml-1">Prosumer</span>
         </span>
       </div>
       <nav className="flex flex-1 flex-col">
