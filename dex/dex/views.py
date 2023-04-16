@@ -100,14 +100,9 @@ class TradeViewSet(
 
         prosumer_id = self.kwargs.get("prosumer_id")
         if prosumer_id:
-            return queryset.filter(
-                Q(buy__prosumer__id=prosumer_id) | Q(sell__prosumer__id=prosumer_id)
-            )
+            return queryset.filter(order__prosumer__id=prosumer_id)
 
-        return queryset.filter(
-            Q(buy__prosumer__billing_account=self.request.user)
-            | Q(sell__prosumer__billing_account=self.request.user)
-        )
+        return queryset.filter(order__prosumer__billing_account=self.request.user)
 
     @action(
         detail=False,
