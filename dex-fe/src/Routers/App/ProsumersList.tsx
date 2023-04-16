@@ -9,7 +9,7 @@ import { classNames } from "../../utils/classNames";
 import { navigate } from "raviger";
 import { useAtom } from "jotai";
 import { sidebarItems } from "../../Components/Common/SidebarItems";
-import { Prosumer } from "../../API/models/Prosumers";
+import { Prosumer } from "../../API/models/DEX";
 
 const Table = PaginatedApiTable<Prosumer>;
 

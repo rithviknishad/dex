@@ -2,7 +2,7 @@
   "name": "dex-fe",
   "version": "0.1.0",
   "private": true,
-  "proxy": "http://dex-api:9000",
+  "proxy": "http://localhost:9000",
   "dependencies": {
     "@headlessui/react": "^1.7.13",
     "@testing-library/jest-dom": "^5.16.5",

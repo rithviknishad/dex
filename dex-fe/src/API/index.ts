@@ -1,7 +1,6 @@
 import fireRequest, { modelEndpoints } from "./fireRequest";
 import { JWTAuth, ModelPK } from "./models";
-import { BuyOrder, Prosumer, SellOrder } from "./models/Prosumers";
-import { Trade } from "./models/Trades";
+import { Order, Prosumer, Trade } from "./models/DEX";
 
 /**
  * Authentication related endpoints.
@@ -38,29 +37,18 @@ export const Auth = {
 export const Prosumers = {
   ...modelEndpoints<Prosumer>("/api/v1/prosumers/"),
 
-  buyOrders: (prosumer_id: ModelPK) => {
-    const { list, create, read } = modelEndpoints<BuyOrder>(
-      `/api/v1/prosumers/${prosumer_id}/buy/`
-    );
-    return { list, create, read };
-  },
+  get(prosumer_id: ModelPK) {
+    return {
+      orders: modelEndpoints<Order>("/api/v1/prosumers/:prosumer_id/orders/", {
+        rewrites: { prosumer_id },
+      }),
 
-  sellOrders: (prosumer_id: ModelPK) => {
-    const { list, create, read } = modelEndpoints<SellOrder>(
-      `/api/v1/prosumers/${prosumer_id}/sell/`
-    );
-    return { list, create, read };
-  },
-
-  trades: (prosumer_id: ModelPK) => {
-    const { list, read } = modelEndpoints<Trade>(
-      `/api/v1/prosumers/${prosumer_id}/trades/`
-    );
-    return { list, read };
+      trades: modelEndpoints<Trade>("/api/v1/prosumers/:prosumer_id/trades/", {
+        rewrites: { prosumer_id },
+      }),
+    };
   },
 };
 
-export const Trades = {
-  list: modelEndpoints<Trade>("/api/v1/trades/").list,
-  create: modelEndpoints<Trade>("/api/v1/trades/").create,
-};
+export const Orders = modelEndpoints<Order>("/api/v1/orders/");
+export const Trades = modelEndpoints<Trade>("/api/v1/trades/");
