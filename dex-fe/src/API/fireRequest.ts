@@ -17,7 +17,7 @@ export interface FireRequestOptions {
   key?: string;
   noAuth?: boolean;
   rewrites?: Record<string, string | number>;
-  query?: Record<string, string | number>;
+  query?: Record<string, string | number | undefined>;
 }
 
 /**
@@ -49,7 +49,9 @@ const fireRequest = <T>(
   if (options.query) {
     const queryParams = new URLSearchParams();
     for (const [key, value] of Object.entries(options.query || {})) {
-      queryParams.append(key, value.toString());
+      if (value !== undefined) {
+        queryParams.append(key, value.toString());
+      }
     }
     request.path += `?${queryParams.toString()}`;
   }

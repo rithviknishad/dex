@@ -4,10 +4,28 @@ import SignOut from "./SignOut";
 import ProsumersList from "./ProsumersList";
 import Sidebar from "../../Components/Common/Sidebar";
 import Breadcrumbs from "../../Components/Common/Breadcrumbs";
+import ProsumerDetails from "./ProsumerDetails";
+import OrdersList from "./OrdersList";
+import OrderDetails from "./OrderDetails";
+import TradesList from "./TradesList";
+import TradeDetails from "./TradeDetails";
 
-const routes = {
+interface Routes {
+  [key: string]: (path?: any) => JSX.Element;
+}
+
+const routes: Routes = {
   "/": () => <Redirect to="/prosumers" />,
   "/prosumers": () => <ProsumersList />,
+  "/prosumers/:id": (path) => <ProsumerDetails {...path} />,
+  "/prosumers/:prosumer/orders": (path) => <OrdersList {...path} />,
+  "/prosumers/:prosumer/orders/:id": (path) => <OrderDetails {...path} />,
+  "/prosumers/:prosumer/trades": (path) => <TradesList {...path} />,
+  "/prosumers/:prosumer/trades/:id": (path) => <TradeDetails {...path} />,
+  "/orders": () => <OrdersList />,
+  "/orders/:id": (path) => <OrderDetails {...path} />,
+  "/trades": () => <TradesList />,
+  "/trades/:id": (path) => <TradeDetails {...path} />,
   "/signout": () => <SignOut />,
 };
 
