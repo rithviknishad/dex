@@ -2,7 +2,7 @@ import { atom, useAtom } from "jotai";
 import { classNames } from "../../utils/classNames";
 import { Order, Prosumer } from "../../API/models/DEX";
 import { useCallback, useEffect, useState } from "react";
-import { Orders, Prosumers } from "../../API";
+import { Prosumers } from "../../API";
 import { handleFireRequestError } from "../../API/fireRequest";
 import { Model } from "../../API/models";
 import { toast } from "react-hot-toast";

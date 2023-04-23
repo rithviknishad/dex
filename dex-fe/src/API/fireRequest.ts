@@ -18,6 +18,7 @@ export interface FireRequestOptions {
   noAuth?: boolean;
   rewrites?: Record<string, string | number>;
   query?: Record<string, string | number | undefined>;
+  headers?: Record<string, string>;
 }
 
 /**
@@ -63,6 +64,13 @@ const fireRequest = <T>(
   if (accessToken && !options.noAuth) {
     axiosConfig.headers = {
       Authorization: `Bearer ${accessToken}`,
+    };
+  }
+
+  if (options.headers) {
+    axiosConfig.headers = {
+      ...axiosConfig.headers,
+      ...options.headers,
     };
   }
 
