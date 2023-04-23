@@ -2,11 +2,12 @@ import { atom, useAtom } from "jotai";
 import { classNames } from "../../utils/classNames";
 import { Order, Prosumer } from "../../API/models/DEX";
 import { useCallback, useEffect, useState } from "react";
-import { Prosumers } from "../../API";
+import { Prosumers, Webhooks } from "../../API";
 import { handleFireRequestError } from "../../API/fireRequest";
 import { Model } from "../../API/models";
 import { toast } from "react-hot-toast";
 import { authProfileAtom } from "../../hooks/useJWTAuth";
+import APIErrors from "../../Components/Common/APIErrors";
 
 const exchangeSignatureAtom = atom("");
 
@@ -72,7 +73,44 @@ export default function DeveloperSettings() {
             </dl>
           </div>
         </div>
-        <div className="m-4 mt-12">
+        <div className="m-4 mt-20">
+          <div>
+            <h2 className="text-base font-semibold leading-7 text-gray-900">
+              Webhooks
+            </h2>
+            <p className="mt-1 text-sm leading-6 text-gray-500">
+              These webhooks are used to invoke sensitive actions on the
+              exchange's private network.
+            </p>
+
+            <dl className="mt-6 space-y-6 divide-y divide-gray-100 border-t border-gray-200 text-sm leading-6">
+              <div className="pt-6 sm:flex">
+                <dt className="font-medium text-gray-900 sm:w-96 sm:flex-none sm:pr-6">
+                  /api/v1/trades/webhooks/exchange/
+                </dt>
+                <dd className="mt-1 flex justify-between gap-x-6 sm:mt-0 sm:flex-auto">
+                  <div className="text-gray-600">
+                    This webhook is used to manually trigger the processing of
+                    all OPEN orders.
+                  </div>
+                  <button
+                    type="submit"
+                    onClick={() => {
+                      toast.promise(Webhooks.processTrades(exchangeSignature), {
+                        loading: "Triggering webhook: process_trades",
+                        success: "All OPEN orders have been processed",
+                        error: (err) => <APIErrors error={err} asRecord />,
+                      });
+                    }}
+                  >
+                    Invoke
+                  </button>
+                </dd>
+              </div>
+            </dl>
+          </div>
+        </div>
+        <div className="m-4 mt-20">
           <OrderCreateBuilder />
         </div>
       </div>

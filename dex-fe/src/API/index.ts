@@ -52,3 +52,16 @@ export const Prosumers = {
 
 export const Orders = modelEndpoints<Order>("/api/v1/orders/");
 export const Trades = modelEndpoints<Trade>("/api/v1/trades/");
+
+export const Webhooks = {
+  processTrades: (exchangeSignature: string) =>
+    fireRequest<{}>(
+      "POST /api/v1/trades/webhooks/exchange/",
+      {},
+      {
+        headers: {
+          "X-Exchange-Signature": exchangeSignature,
+        },
+      }
+    ),
+};
