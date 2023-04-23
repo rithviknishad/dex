@@ -1,14 +1,36 @@
 import { Link } from "raviger";
 import { authProfileAtom } from "../../hooks/useJWTAuth";
 import { classNames } from "../../utils/classNames";
-import { useAtom } from "jotai";
+import { atom, useAtom } from "jotai";
 import { SidebarItem, sidebarItems } from "./SidebarItems";
+import SlideOver from "./Slideover";
+
+export const sidebarIsOpenAtom = atom(false);
 
 export default function Sidebar() {
+  const [isOpen, setIsOpen] = useAtom(sidebarIsOpenAtom);
+
+  return (
+    <>
+      <div className="hidden md:flex md:grow">
+        <GenericSidebar />
+      </div>
+      <div className="md:hidden">
+        <SlideOver slideFrom="left" onlyChild open={isOpen} setOpen={setIsOpen}>
+          <div className="flex grow h-full">
+            <GenericSidebar />
+          </div>
+        </SlideOver>
+      </div>
+    </>
+  );
+}
+
+const GenericSidebar = () => {
   const [account] = useAtom(authProfileAtom);
 
   return (
-    <div className="flex grow flex-col gap-y-5 overflow-y-auto bg-gray-900 px-6 w-full max-w-xs">
+    <div className="flex grow flex-col gap-y-5 overflow-y-auto bg-gray-900 px-6 w-full md:max-w-xs">
       <div className="flex h-16 shrink-0 items-center">
         <span className="font-display text-2xl text-brand-500 font-bold">
           DEX <span className="text-gray-400 ml-1">Prosumer</span>
@@ -43,11 +65,12 @@ export default function Sidebar() {
       </nav>
     </div>
   );
-}
+};
 
 const Item = ({ item }: { item: SidebarItem }) => {
   const current = window.location.pathname.startsWith(item.href);
   const [count] = useAtom(item.countAtom);
+  const [_, setIsOpen] = useAtom(sidebarIsOpenAtom);
 
   return (
     <li key={item.name}>
@@ -57,8 +80,9 @@ const Item = ({ item }: { item: SidebarItem }) => {
           current
             ? "bg-gray-800 text-white"
             : "text-gray-400 hover:text-white hover:bg-gray-800",
-          "group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold items-center transition-all duration-150"
+          "group flex gap-x-3 rounded-md p-4 md:p-2 text-sm leading-6 font-semibold items-center transition-all duration-150"
         )}
+        onClick={() => setIsOpen(false)}
       >
         <i className={classNames("mx-2", item.icon)} aria-hidden="true" />
         {item.name}

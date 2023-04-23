@@ -1,7 +1,10 @@
 import { Link } from "raviger";
 import { classNames } from "../../utils/classNames";
+import { useAtom } from "jotai";
+import { sidebarIsOpenAtom } from "./Sidebar";
 
 export default function Breadcrumbs() {
+  const [_, setSidebarOpen] = useAtom(sidebarIsOpenAtom);
   const segments = window.location.pathname.split("/");
   segments.shift();
 
@@ -14,6 +17,14 @@ export default function Breadcrumbs() {
 
   return (
     <nav className="flex w-full bg-gray-900 p-4" aria-label="Breadcrumb">
+      <div className="md:hidden">
+        <button
+          className="rounded-lg mr-2 text-gray-300 focus:outline"
+          onClick={() => setSidebarOpen(true)}
+        >
+          <i className="fa-solid fa-bars p-2" />
+        </button>
+      </div>
       <ol role="list" className="flex items-center space-x-4">
         <li>
           <Link href="/" className="text-gray-600 hover:text-gray-500">
