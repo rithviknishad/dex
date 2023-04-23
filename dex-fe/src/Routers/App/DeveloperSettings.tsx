@@ -95,6 +95,7 @@ export default function DeveloperSettings() {
                   </div>
                   <button
                     type="submit"
+                    className="!bg-yellow-600 hover:!bg-yellow-700"
                     onClick={() => {
                       toast.promise(Webhooks.processTrades(exchangeSignature), {
                         loading: "Triggering webhook: process_trades",
@@ -170,7 +171,7 @@ const OrderCreateBuilder = () => {
             type="button"
             onClick={() => setOrders((orders) => [...orders, {}])}
           >
-            New Entry
+            <i className="fa-solid fa-plus" />
           </button>
         </div>
       </div>
@@ -335,18 +336,26 @@ const OrderCreateBuilderItem = ({
       </div>
       <dd className="mt-1 flex justify-end gap-x-3 sm:mt-0 sm:flex-auto">
         <button
-          disabled={!!order.created_obj}
+          disabled={!!order.created_obj || !order.energy}
           type="submit"
           onClick={() => create()}
+          className={classNames(
+            order.energy
+              ? order.energy > 0
+                ? "!bg-green-600"
+                : "!bg-yellow-500"
+              : ""
+          )}
         >
-          Create
+          {order.energy ? (order.energy < 0 ? "Buy" : "Sell") : "Enter energy"}
         </button>
         <button
           disabled={!!order.created_obj}
+          className="!bg-red-500"
           type="submit"
           onClick={() => remove()}
         >
-          Remove
+          <i className="fa-solid fa-minus" />
         </button>
       </dd>
     </div>

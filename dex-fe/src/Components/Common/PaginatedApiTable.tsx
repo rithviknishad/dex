@@ -14,7 +14,7 @@ interface Props<T extends object> extends GenericTableProps<Model<T>> {
 const PaginatedApiTable = <T extends object>({
   onQuery,
   autoRefreshInterval = 60e3,
-  perPageLimit = 20,
+  perPageLimit = 10,
   ...props
 }: Props<T>) => {
   const [page, setPage] = useState(1);
