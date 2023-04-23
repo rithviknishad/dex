@@ -52,7 +52,7 @@ const GenericSidebar = () => {
             >
               <img
                 className="h-8 w-8 rounded-full bg-gray-800"
-                src="https://github.com/rithviknishad.png"
+                src="https://github.com/ghost.png"
                 alt=""
               />
               <span className="sr-only">Your profile</span>
