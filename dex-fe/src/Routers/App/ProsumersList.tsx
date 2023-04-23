@@ -66,19 +66,23 @@ export default function ProsumersList() {
       >
         <form onSubmit={handleRegisterProsumer}>
           <div>
-            <label htmlFor="name">Name</label>
+            <label htmlFor="name" className="required">
+              Name
+            </label>
             <input
               id="name"
               name="name"
               type="text"
               autoComplete="name"
               required
-              placeholder="Something you would uniquely identify. E.g. 'My Home'"
+              placeholder="E.g. 'My Home'"
             />
           </div>
           <div className="flex gap-4">
             <div>
-              <label htmlFor="location__latitude">Latitude</label>
+              <label htmlFor="location__latitude" className="required">
+                Latitude
+              </label>
               <input
                 id="location__latitude"
                 name="location__latitude"
@@ -92,7 +96,9 @@ export default function ProsumersList() {
               />
             </div>
             <div>
-              <label htmlFor="location__longitude">Longitude</label>
+              <label htmlFor="location__longitude" className="required">
+                Longitude
+              </label>
               <input
                 id="location__longitude"
                 name="location__longitude"

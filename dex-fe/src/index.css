@@ -36,6 +36,11 @@ form input[type="tel"] {
   @apply mt-2
 }
 
+/* add red * after label if classname contains 'required' */
+.required:after {
+  @apply content-["*"] text-red-500 ml-1
+}
+
 input[type="text"],
 input[type="password"] ,
 input[type="email"],
