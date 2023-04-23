@@ -22,7 +22,7 @@ from .serializers import (
 
 class ProsumerViewSet(viewsets.ModelViewSet):
     lookup_field = "id"
-    queryset = Prosumer.objects.filter(deleted=False)
+    queryset = Prosumer.objects.filter(deleted=False).order_by("-updated_on")
     serializer_class = ProsumerSerializer
     permission_classes = (
         IsAuthenticated,
@@ -45,7 +45,7 @@ class OrderViewSet(
     GenericViewSet,
 ):
     lookup_field = "id"
-    queryset = Order.objects.filter(deleted=False)
+    queryset = Order.objects.filter(deleted=False).order_by("-updated_on")
     serializer_class = OrderSerialzier
     permission_classes = (
         IsAuthenticated,
@@ -86,7 +86,7 @@ class TradeViewSet(
     GenericViewSet,
 ):
     lookup_field = "id"
-    queryset = Trade.objects.all()
+    queryset = Trade.objects.all().order_by("-updated_on")
     serializer_class = TradeSerializer
     permission_classes = (
         IsAuthenticated,

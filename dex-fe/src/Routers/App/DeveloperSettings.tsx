@@ -8,6 +8,7 @@ import { Model } from "../../API/models";
 import { toast } from "react-hot-toast";
 import { authProfileAtom } from "../../hooks/useJWTAuth";
 import APIErrors from "../../Components/Common/APIErrors";
+import moment from "moment";
 
 const exchangeSignatureAtom = atom("");
 
@@ -289,7 +290,9 @@ const OrderCreateBuilderItem = ({
         >
           <option value="">Select prosumer</option>
           {availableProsumers.map((prosumer) => (
-            <option value={prosumer.id}>{prosumer.name}</option>
+            <option value={prosumer.id}>
+              {prosumer.name} ({moment(prosumer.updated_on).fromNow()})
+            </option>
           ))}
         </select>
       </dt>
