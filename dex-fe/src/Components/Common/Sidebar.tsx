@@ -12,7 +12,7 @@ export default function Sidebar() {
 
   return (
     <>
-      <div className="hidden md:flex md:grow">
+      <div className="hidden md:flex md:w-full md:max-w-xs md:grow">
         <GenericSidebar />
       </div>
       <div className="md:hidden">
@@ -30,7 +30,7 @@ const GenericSidebar = () => {
   const [account] = useAtom(authProfileAtom);
 
   return (
-    <div className="flex grow flex-col gap-y-5 overflow-y-auto bg-gray-900 px-6 w-full md:max-w-xs">
+    <div className="flex grow flex-col gap-y-5 overflow-y-auto bg-gray-900 px-6">
       <div className="flex h-16 shrink-0 items-center">
         <span className="font-display text-2xl text-brand-500 font-bold">
           DEX <span className="text-gray-400 ml-1">Prosumer</span>
