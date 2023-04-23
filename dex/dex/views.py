@@ -127,9 +127,17 @@ class TradeViewSet(
         sell_orders = open_orders.filter(energy__gt=0)
         buy_orders = open_orders.filter(energy__lt=0)
 
+        # Reject if there are no sell orders
+        if not sell_orders.exists():
+            return Response({"error": "No sell orders exist"}, status=400)
+
+        # Reject if there are no buy orders
+        if not buy_orders.exists():
+            return Response({"error": "No buy orders exist"}, status=400)
+
         # Aggregate total generation and demand
-        total_generation = sell_orders.aggregate(Sum("energy"))["energy__sum"]
-        total_demand = -buy_orders.aggregate(Sum("energy"))["energy__sum"]
+        total_generation = sell_orders.aggregate(Sum("energy"))["energy__sum"] or 0
+        total_demand = -(buy_orders.aggregate(Sum("energy"))["energy__sum"] or 0)
         # Aggregate total generation and demand
         # generation_demand = (
         #     Order.objects.filter(status__lte=OrderStatus.OPEN)
