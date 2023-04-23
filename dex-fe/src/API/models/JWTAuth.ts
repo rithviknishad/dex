@@ -13,6 +13,8 @@ export declare interface BillingAccount {
   name: string;
   email: string;
   is_active: boolean;
+  is_staff: boolean;
+  is_superuser: boolean;
 }
 
 export declare interface RegisterBillingAccount {
