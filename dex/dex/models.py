@@ -71,7 +71,7 @@ class OrderCategory(models.TextChoices):
 
     STORAGE = "STORAGE", "STORAGE"
 
-    SOALR = "SOLAR", "SOALR"
+    SOALR = "SOLAR", "SOLAR"
     WIND = "WIND", "WIND"
     HYDRO = "HYDRO", "HYDRO"
     GEOTHERMAL = "GEOTHERMAL", "GEOTHERMAL"
