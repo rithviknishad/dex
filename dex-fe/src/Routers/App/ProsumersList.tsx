@@ -145,14 +145,30 @@ export default function ProsumersList() {
           theads={{
             id: "Prosumer#",
             name: "Name",
+            trades_count: "Trades",
+            net_energy_exported: "Energy Exported",
             location: "Location",
             created_on: "Registered",
+            billing_account: "Billing Account",
           }}
           render={{
             id: ({ id }) => (
               <span className="font-mono font-bold text-gray-500">
                 {id.toString().slice(-6)}
               </span>
+            ),
+            net_energy_exported: ({ net_energy_exported }) => (
+              <p
+                className={classNames(
+                  "font-bold",
+                  net_energy_exported > 0 ? "text-green-600" : "text-red-700"
+                )}
+              >
+                <span className="font-mono tracking-wider">
+                  {(net_energy_exported * 1e-3).toFixed(2)}
+                </span>
+                <span className="opacity-70 ml-2">kWh</span>
+              </p>
             ),
             location: ({ location: loc }) => (
               <p className="font-mono tracking-wide">
@@ -162,6 +178,12 @@ export default function ProsumersList() {
             created_on: ({ created_on }) => (
               <span className="text-gray-600">
                 {moment(created_on).fromNow()}
+              </span>
+            ),
+            billing_account: ({ billing_account }) => (
+              <span className="font-mono font-bold text-gray-500">
+                {billing_account.username}{" "}
+                {billing_account.is_superuser && "(Exchange Admin)"}
               </span>
             ),
           }}

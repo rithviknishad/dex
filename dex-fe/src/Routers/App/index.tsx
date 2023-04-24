@@ -63,7 +63,7 @@ const DevelopmentModeNotice = () => {
           />
         </div>
         <div className="ml-3">
-          <p className="text-sm text-yellow-700">
+          <p className="text-xs sm:text-sm text-yellow-700">
             You are using a <strong>development</strong> version of the{" "}
             <strong>DEX API</strong>. Results may be inaccurate. Not for
             production use.{" "}

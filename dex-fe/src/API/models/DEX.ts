@@ -9,6 +9,8 @@ export interface Prosumer {
     latitude: number;
     longitude: number;
   };
+  trades_count: number;
+  net_energy_exported: number;
 }
 
 export interface Order {

@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from django.contrib.gis.geos import Point
+from django.db.models import Sum
 
 from .models import (
     Prosumer,
@@ -32,6 +33,17 @@ class PointFieldSerializer(serializers.Field):
 class ProsumerSerializer(serializers.ModelSerializer):
     location = PointFieldSerializer()
     billing_account = UserSerializer(read_only=True)
+    trades_count = serializers.SerializerMethodField()
+    net_energy_exported = serializers.SerializerMethodField()
+
+    def get_trades_count(self, obj):
+        return Trade.objects.filter(order__prosumer=obj).count()
+
+    def get_net_energy_exported(self, obj):
+        return (
+            Order.objects.filter(prosumer=obj).aggregate(Sum("energy"))["energy__sum"]
+            or 0
+        )
 
     class Meta:
         model = Prosumer
@@ -40,6 +52,8 @@ class ProsumerSerializer(serializers.ModelSerializer):
             "name",
             "description",
             "location",
+            "trades_count",
+            "net_energy_exported",
         ) + BASE_READ_ONLY_FIELDS
         read_only_fields = BASE_READ_ONLY_FIELDS + ("billing_account",)
 
