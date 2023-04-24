@@ -57,6 +57,40 @@ export default function OrdersList({ prosumer }: RouteParams) {
               </span>
             ),
             prosumer: ({ prosumer }) => (prosumer as Prosumer).name,
+            energy: ({ energy }) => (
+              <p
+                className={classNames(
+                  "font-bold",
+                  energy > 0 ? "text-green-600" : "text-red-700"
+                )}
+              >
+                <span className="font-mono tracking-wider">
+                  {(energy * 1e-3).toFixed(2)}
+                </span>
+                <span className="opacity-70 ml-2">kWh</span>
+              </p>
+            ),
+            price: ({ price }) =>
+              price ? (
+                <p>
+                  <span className="font-mono tracking-wider">{price}</span>
+                  <span className="text-gray-500 ml-2">Sparks/Wh</span>
+                </p>
+              ) : (
+                <span className="text-xs text-gray-400">N/A</span>
+              ),
+            status: ({ status }) => (
+              <span
+                className={classNames(
+                  "px-2 py-1 rounded-full text-xs font-bold",
+                  status === "ORDER_REQ_RECEIVED" &&
+                    "bg-gray-100 text-gray-800",
+                  status === "COMPLETED" && "bg-green-100 text-green-800"
+                )}
+              >
+                {status}
+              </span>
+            ),
           }}
           tableActions={[
             <button

@@ -8,6 +8,7 @@ import PaginatedApiTable from "../../Components/Common/PaginatedApiTable";
 import { classNames } from "../../utils/classNames";
 import { navigate } from "raviger";
 import { Prosumer } from "../../API/models/DEX";
+import moment from "moment";
 
 const Table = PaginatedApiTable<Prosumer>;
 
@@ -144,9 +145,8 @@ export default function ProsumersList() {
           theads={{
             id: "Prosumer#",
             name: "Name",
-            description: "Description",
             location: "Location",
-            updated_on: "Modified",
+            created_on: "Registered",
           }}
           render={{
             id: ({ id }) => (
@@ -155,9 +155,14 @@ export default function ProsumersList() {
               </span>
             ),
             location: ({ location: loc }) => (
-              <>
-                {loc.latitude}, {loc.longitude}
-              </>
+              <p className="font-mono tracking-wide">
+                {loc.latitude.toFixed(2)}°N, {loc.longitude.toFixed(2)}°E
+              </p>
+            ),
+            created_on: ({ created_on }) => (
+              <span className="text-gray-600">
+                {moment(created_on).fromNow()}
+              </span>
             ),
           }}
           tableActions={[

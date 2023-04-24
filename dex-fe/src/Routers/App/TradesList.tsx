@@ -101,9 +101,9 @@ export default function TradesList({ prosumer }: RouteParams) {
             settlement_status: ({ settlement_status }) => (
               <span
                 className={classNames(
-                  "px-3 py-0.5 rounded text-sm text-center tracking-wider",
+                  "px-2 py-1 rounded-full text-xs font-bold",
                   settlement_status === "PAYMENT_PENDING" &&
-                    "bg-yellow-100 text-yellow-600"
+                    "bg-yellow-100 text-yellow-800"
                 )}
               >
                 {settlement_status.replace("PAYMENT_", "")}
