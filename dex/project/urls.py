@@ -7,7 +7,7 @@ from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
 
-from dex.views import ProsumerViewSet, OrderViewSet, TradeViewSet
+from dex.views import ProsumerViewSet, OrderViewSet, TradeViewSet, SummaryViewSet
 from users.views import UserViewSet
 
 schema_view = get_schema_view(
@@ -32,6 +32,7 @@ schema_view = get_schema_view(
 )
 
 router = routers.DefaultRouter()
+router.register(r"summary", SummaryViewSet, basename="summary")
 router.register(r"prosumers/(?P<prosumer_id>[0-9a-f-]+)/orders", OrderViewSet)
 router.register(r"prosumers/(?P<prosumer_id>[0-9a-f-]+)/trades", TradeViewSet)
 router.register(r"prosumers", ProsumerViewSet)

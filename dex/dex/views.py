@@ -12,32 +12,55 @@ from rest_framework import status
 
 
 from . import permissions
-from .models import Prosumer, Order, OrderStatus, Trade
+from .models import Prosumer, Order, OrderStatus, TradeSettlementStatus, Trade
 from .serializers import (
+    SummarySerializer,
     ProsumerSerializer,
     OrderSerialzier,
     TradeSerializer,
 )
 
 
-# class SummaryViewSet(GenericViewSet):
+class SummaryViewSet(GenericViewSet):
 
-#     permission_classes = (IsAuthenticated,)
+    permission_classes = (IsAuthenticated,)
+    serializer_class = SummarySerializer
 
-#     def prosumers_summary(self, request):
-#         queryset = Prosumer.objects.filter(deleted=False)
-#         if not request.user.is_superuser:
-#             queryset = queryset.filter(billing_account=request.user)
+    @action(detail=False, methods=["get"], url_path="summary")
+    def summary(self, request):
+        prosumers = Prosumer.objects.filter(deleted=False)
+        user_prosumers = prosumers.filter(billing_account=request.user)
 
-#         prosumers = queryset.count()
-#         net_total_export = queryset.aggregate(Sum("energy"))["energy__sum"] or 0
+        orders = Order.objects.filter(deleted=False)
+        user_orders = orders.filter(prosumer__billing_account=request.user)
 
-#         return Response(
-#             {
-#                 "prosumers": prosumers,
-#                 "net_total_export": net_total_export,
-#             }
-#         )
+        trades = Trade.objects.filter(deleted=False)
+        user_trades = trades.filter(order__prosumer__billing_account=request.user)
+
+        total_generation = orders.aggregate(Sum("energy"))["energy__sum"] or 0
+        total_demand = -(orders.aggregate(Sum("energy"))["energy__sum"] or 0)
+
+        user_total_generation = user_orders.aggregate(Sum("energy"))["energy__sum"] or 0
+        user_total_demand = -(user_orders.aggregate(Sum("energy"))["energy__sum"] or 0)
+
+        return Response(
+            {
+                "global_prosumers_count": prosumers.count(),
+                "user_prosumers_count": user_prosumers.count(),
+                "global_orders_count": orders.count(),
+                "user_orders_count": user_orders.count(),
+                "users_open_orders_count": user_orders.filter(
+                    status__lte=OrderStatus.OPEN
+                ).count(),
+                "global_trades_count": trades.count(),
+                "user_trades_count": user_trades.count(),
+                "user_unsettled_trades_count": user_trades.filter(
+                    settlement_status__lte=TradeSettlementStatus.PAYMENT_PENDING,
+                ).count(),
+                "energy_flow": total_generation + total_demand,
+                "user_energy_flow": user_total_generation + user_total_demand,
+            }
+        )
 
 
 class ProsumerViewSet(viewsets.ModelViewSet):

@@ -30,6 +30,22 @@ class PointFieldSerializer(serializers.Field):
             raise serializers.ValidationError("Invalid point data")
 
 
+class SummarySerializer(serializers.Serializer):
+    global_prosumers_count = serializers.IntegerField()
+    user_prosumers_count = serializers.IntegerField()
+
+    global_orders_count = serializers.IntegerField()
+    user_orders_count = serializers.IntegerField()
+    users_open_orders_count = serializers.IntegerField()
+
+    global_trades_count = serializers.IntegerField()
+    user_trades_count = serializers.IntegerField()
+    user_unsettled_trades_count = serializers.IntegerField()
+
+    energy_flow = serializers.IntegerField()
+    user_energy_flow = serializers.IntegerField()
+
+
 class ProsumerSerializer(serializers.ModelSerializer):
     location = PointFieldSerializer()
     billing_account = UserSerializer(read_only=True)

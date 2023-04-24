@@ -1,6 +1,6 @@
 import fireRequest, { modelEndpoints } from "./fireRequest";
 import { JWTAuth, ModelPK } from "./models";
-import { Order, Prosumer, Trade } from "./models/DEX";
+import { Order, Prosumer, Trade, Summary } from "./models/DEX";
 
 /**
  * Authentication related endpoints.
@@ -52,6 +52,9 @@ export const Prosumers = {
 
 export const Orders = modelEndpoints<Order>("/api/v1/orders/");
 export const Trades = modelEndpoints<Trade>("/api/v1/trades/");
+export const SummaryAPI = {
+  get: () => fireRequest<Summary>("GET /api/v1/summary/summary/"),
+};
 
 export const Webhooks = {
   processTrades: (exchangeSignature: string) =>

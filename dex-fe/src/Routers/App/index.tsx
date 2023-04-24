@@ -10,6 +10,10 @@ import OrderDetails from "./OrderDetails";
 import TradesList from "./TradesList";
 import TradeDetails from "./TradeDetails";
 import DeveloperSettings from "./DeveloperSettings";
+import { atom, useAtom } from "jotai";
+import { Summary } from "../../API/models/DEX";
+import { useEffect } from "react";
+import { SummaryAPI } from "../../API";
 
 interface Routes {
   [key: string]: (path?: any) => JSX.Element;
@@ -37,7 +41,19 @@ export default function AppRouter() {
   return <Page>{route}</Page>;
 }
 
+export const summaryAtom = atom<Summary | null>(null);
+
 const Page = ({ children }: { children: React.ReactNode }) => {
+  const [summary, setSummary] = useAtom(summaryAtom);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      SummaryAPI.get().then((res) => setSummary(res.data));
+    }, 5000);
+
+    return () => clearInterval(interval);
+  }, []);
+
   return (
     <div className="flex h-full bg-gray-100">
       <Sidebar />

@@ -4,6 +4,8 @@ import { classNames } from "../../utils/classNames";
 import { atom, useAtom } from "jotai";
 import { SidebarItem, sidebarItems } from "./SidebarItems";
 import SlideOver from "./Slideover";
+import { summaryAtom } from "../../Routers/App";
+import { Summary } from "../../API/models/DEX";
 
 export const sidebarIsOpenAtom = atom(false);
 
@@ -69,8 +71,11 @@ const GenericSidebar = () => {
 
 const Item = ({ item }: { item: SidebarItem }) => {
   const current = window.location.pathname.startsWith(item.href);
-  const [count] = useAtom(item.countAtom);
   const [_, setIsOpen] = useAtom(sidebarIsOpenAtom);
+  const [summary] = useAtom(summaryAtom);
+
+  const count =
+    item.summaryCountKey && summary?.[item.summaryCountKey as keyof Summary];
 
   return (
     <li key={item.name}>

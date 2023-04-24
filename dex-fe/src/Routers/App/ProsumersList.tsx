@@ -181,9 +181,13 @@ export default function ProsumersList() {
               </span>
             ),
             billing_account: ({ billing_account }) => (
-              <span className="font-mono font-bold text-gray-500">
+              <span className={classNames("font-mono font-bold text-gray-500")}>
                 {billing_account.username}{" "}
-                {billing_account.is_superuser && "(Exchange Admin)"}
+                {billing_account.is_superuser && (
+                  <span className="text-white bg-zinc-600 px-2.5 py-0.5 rounded-full text-xs tracking-widest uppercase">
+                    Exchange Admin
+                  </span>
+                )}
               </span>
             ),
           }}
