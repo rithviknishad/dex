@@ -37,11 +37,21 @@ class SummaryViewSet(GenericViewSet):
         trades = Trade.objects.filter(deleted=False)
         user_trades = trades.filter(order__prosumer__billing_account=request.user)
 
-        total_generation = orders.aggregate(Sum("energy"))["energy__sum"] or 0
-        total_demand = -(orders.aggregate(Sum("energy"))["energy__sum"] or 0)
+        total_generation = (
+            orders.filter(energy__gt=0).aggregate(Sum("energy"))["energy__sum"] or 0
+        )
+        total_demand = -(
+            orders.filter(energy__lt=0).aggregate(Sum("energy"))["energy__sum"] or 0
+        )
 
-        user_total_generation = user_orders.aggregate(Sum("energy"))["energy__sum"] or 0
-        user_total_demand = -(user_orders.aggregate(Sum("energy"))["energy__sum"] or 0)
+        user_total_generation = (
+            user_orders.filter(energy__gt=0).aggregate(Sum("energy"))["energy__sum"]
+            or 0
+        )
+        user_total_demand = -(
+            user_orders.filter(energy__lt=0).aggregate(Sum("energy"))["energy__sum"]
+            or 0
+        )
 
         return Response(
             {

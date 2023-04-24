@@ -9,6 +9,8 @@ import { classNames } from "../../utils/classNames";
 import { navigate } from "raviger";
 import { Prosumer } from "../../API/models/DEX";
 import moment from "moment";
+import { useAtom } from "jotai";
+import { summaryAtom } from ".";
 
 const Table = PaginatedApiTable<Prosumer>;
 
@@ -23,6 +25,7 @@ export default function ProsumersList() {
   const [showCreate, setShowCreate] = useState(false);
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [refreshKey, setRefreshKey] = useState(0);
+  const [summary] = useAtom(summaryAtom);
 
   const handleRegisterProsumer = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -59,7 +62,7 @@ export default function ProsumersList() {
   };
 
   return (
-    <div className="p-4">
+    <div className="md:p-4">
       <Modal
         opened={showCreate}
         onClose={() => setShowCreate(false)}
@@ -130,7 +133,41 @@ export default function ProsumersList() {
           </div>
         </form>
       </Modal>
-      <div className="px-4 py-8 bg-white rounded-lg">
+      <div className="p-2 md:p-0 md:pb-4 flex flex-wrap gap-2 md:gap-4 items-center">
+        <div className="p-4 bg-white rounded-lg">
+          <h3 className="uppercase text-gray-700 font-bold text-xs md:text-sm">
+            Prosumers (You)
+          </h3>
+          <h1 className="text-lg md:text-2xl md:tracking-wider font-bold font-mono">
+            {summary?.user_prosumers_count}
+          </h1>
+        </div>
+        <div className="p-4 bg-white rounded-lg">
+          <h3 className="uppercase text-gray-700 font-bold text-xs md:text-sm">
+            Prosumers (All)
+          </h3>
+          <h1 className="text-lg md:text-2xl md:tracking-wider font-bold font-mono">
+            {summary?.global_prosumers_count}
+          </h1>
+        </div>
+        <div className="p-4 bg-white rounded-lg">
+          <h3 className="uppercase text-gray-700 font-bold text-xs md:text-sm">
+            Traded Energy (You)
+          </h3>
+          <h1 className="text-lg md:text-2xl md:tracking-wider font-bold font-mono text-green-500">
+            {((summary?.user_energy_flow || 0) / 1000).toFixed(1)} kWh
+          </h1>
+        </div>
+        <div className="p-4 bg-white rounded-lg">
+          <h3 className="uppercase text-gray-700 font-bold text-xs md:text-sm">
+            Traded (All)
+          </h3>
+          <h1 className="text-lg md:text-2xl md:tracking-wider font-bold font-mono text-green-500">
+            {((summary?.energy_flow || 0) / 1000).toFixed(1)} kWh
+          </h1>
+        </div>
+      </div>
+      <div className="px-1 md:px-4 py-8 bg-white rounded-lg">
         <Table
           key={refreshKey}
           onQuery={(limit, offset) => {
