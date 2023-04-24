@@ -11,6 +11,7 @@ from .models import (
 )
 from utils import BASE_READ_ONLY_FIELDS
 from utils.serializers import ChoiceField
+from users.serializers import UserSerializer
 
 
 class PointFieldSerializer(serializers.Field):
@@ -30,6 +31,7 @@ class PointFieldSerializer(serializers.Field):
 
 class ProsumerSerializer(serializers.ModelSerializer):
     location = PointFieldSerializer()
+    billing_account = UserSerializer(read_only=True)
 
     class Meta:
         model = Prosumer
@@ -65,6 +67,17 @@ class TradeSerializer(serializers.ModelSerializer):
         choices=TradeSettlementStatus.choices,
         read_only=True,
     )
+    energy = serializers.SerializerMethodField()
+    amount = serializers.SerializerMethodField()
+
+    def get_energy(self, obj):
+        energy = obj.order.energy
+        if energy < 0:
+            return energy - obj.transmission_losses
+        return energy
+
+    def get_amount(self, obj):
+        return obj.order.energy * obj.price
 
     class Meta:
         model = Trade
@@ -73,6 +86,8 @@ class TradeSerializer(serializers.ModelSerializer):
             "price",
             "transmission_losses",
             "settlement_status",
+            "energy",
+            "amount",
         )
         read_only_fields = fields
 

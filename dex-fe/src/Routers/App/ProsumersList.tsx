@@ -142,13 +142,18 @@ export default function ProsumersList() {
           title="Prosumers"
           description="List of all prosumers managed by your billing account."
           theads={{
-            id: "ID",
+            id: "Prosumer#",
             name: "Name",
             description: "Description",
             location: "Location",
             updated_on: "Modified",
           }}
           render={{
+            id: ({ id }) => (
+              <span className="font-mono font-bold text-gray-500">
+                {id.toString().slice(-6)}
+              </span>
+            ),
             location: ({ location: loc }) => (
               <>
                 {loc.latitude}, {loc.longitude}

@@ -20,6 +20,26 @@ from .serializers import (
 )
 
 
+# class SummaryViewSet(GenericViewSet):
+
+#     permission_classes = (IsAuthenticated,)
+
+#     def prosumers_summary(self, request):
+#         queryset = Prosumer.objects.filter(deleted=False)
+#         if not request.user.is_superuser:
+#             queryset = queryset.filter(billing_account=request.user)
+
+#         prosumers = queryset.count()
+#         net_total_export = queryset.aggregate(Sum("energy"))["energy__sum"] or 0
+
+#         return Response(
+#             {
+#                 "prosumers": prosumers,
+#                 "net_total_export": net_total_export,
+#             }
+#         )
+
+
 class ProsumerViewSet(viewsets.ModelViewSet):
     lookup_field = "id"
     queryset = Prosumer.objects.filter(deleted=False).order_by("-updated_on")
@@ -187,16 +207,13 @@ class TradeViewSet(
         )
 
         def get_sell_trade(order):
-            # Estimated Losses = E[sending] * (1 - efficiency)
-            losses = order.energy * (1 - efficiency)
-            return Trade(
-                order=order, price=order.price, transmission_losses=round(losses)
-            )
+            return Trade(order=order, price=order.price, transmission_losses=0)
 
         def get_buy_trade(order):
             # Estimated Losses = E[receiving] * (1 / efficiency - 1)
             losses = -order.energy * (1 / efficiency - 1)
-            price = market_price * (1 + losses / order.energy)
+            expected_cash_inflow = (-order.energy + losses) * market_price
+            price = expected_cash_inflow / -order.energy
             return Trade(
                 order=order, price=round(price), transmission_losses=round(losses)
             )

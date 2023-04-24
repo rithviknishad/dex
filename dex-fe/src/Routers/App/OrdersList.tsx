@@ -4,6 +4,7 @@ import { Order, Prosumer } from "../../API/models/DEX";
 import { Orders } from "../../API";
 import { classNames } from "../../utils/classNames";
 import { navigate } from "raviger";
+import moment from "moment";
 
 const Table = PaginatedApiTable<Order>;
 
@@ -36,15 +37,25 @@ export default function OrdersList({ prosumer }: RouteParams) {
               : "List of all orders issued by all prosumers managed by your billing account."
           }
           theads={{
-            id: "ID",
-            created_on: "Issued on",
+            id: "Order#",
+            created_on: "Issued",
             prosumer: "Prosumer",
             category: "Category",
-            energy: "Net Export Energy (Wh)",
-            price: "Price (Sparks)",
+            energy: "Net Export Energy (kWh)",
+            price: "Price (Sparks/Wh)",
             status: "Status",
           }}
           render={{
+            id: ({ id }) => (
+              <span className="font-mono font-bold text-gray-500">
+                {id.toString().slice(-6)}
+              </span>
+            ),
+            created_on: ({ created_on }) => (
+              <span className="text-gray-600">
+                {moment(created_on).fromNow()}
+              </span>
+            ),
             prosumer: ({ prosumer }) => (prosumer as Prosumer).name,
           }}
           tableActions={[

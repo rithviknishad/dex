@@ -1,7 +1,8 @@
 import { ModelPK } from ".";
+import { BillingAccount } from "./JWTAuth";
 
 export interface Prosumer {
-  billing_account: ModelPK;
+  billing_account: BillingAccount;
   name: string;
   description?: string;
   location: {
@@ -47,6 +48,8 @@ export interface Trade {
   price: number;
   transmission_losses: number;
   settlement_status: TradeSettlementStatus;
+  energy: number;
+  amount: number;
 }
 
 type TradeSettlementStatus =
