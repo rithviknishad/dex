@@ -18,7 +18,7 @@ export default function DeveloperSettings() {
   );
   return (
     <div className="p-4">
-      <div className="p-8 bg-white rounded-lg">
+      <div className="p-8 bg-white rounded-lg mb-52">
         <h2 className="text-xl font-bold leading-7 text-gray-800 sm:truncate sm:text-2xl sm:tracking-tight">
           Developer Settings
         </h2>
@@ -170,7 +170,30 @@ const OrderCreateBuilder = () => {
           </button>
           <button
             type="button"
-            onClick={() => setOrders((orders) => [...orders, {}])}
+            onClick={() =>
+              setOrders((orders) => {
+                if (orders.length % 2 === 0) {
+                  return [
+                    ...orders,
+                    {
+                      category: "SOLAR",
+                      energy: 10200,
+                      price: 1100,
+                      prosumer: availableProsumers[orders.length],
+                    },
+                  ];
+                }
+                return [
+                  ...orders,
+                  {
+                    category: "DOMESTIC",
+                    energy: -10000,
+                    price: undefined,
+                    prosumer: availableProsumers[orders.length],
+                  },
+                ];
+              })
+            }
           >
             <i className="fa-solid fa-plus" />
           </button>
