@@ -291,7 +291,8 @@ const OrderCreateBuilderItem = ({
           <option value="">Select prosumer</option>
           {availableProsumers.map((prosumer) => (
             <option value={prosumer.id}>
-              {prosumer.name} ({moment(prosumer.updated_on).fromNow()})
+              {prosumer.name} - {prosumer.billing_account.username} - (
+              {moment(prosumer.updated_on).fromNow()})
             </option>
           ))}
         </select>
